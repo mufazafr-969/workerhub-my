@@ -1,1195 +1,2359 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>WorkerHub MY — Smart Foreign Worker Compliance</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"/>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet"/>
-<style>
-  :root {
-    --navy: #0C1B33;
-    --navy2: #142240;
-    --teal: #0ABFBC;
-    --teal2: #07929F;
-    --gold: #F7B731;
-    --red: #FF4757;
-    --green: #2ED573;
-    --orange: #FFA502;
-    --surface: #F0F4FA;
-    --card: #FFFFFF;
-    --text: #1A2744;
-    --muted: #6B7A99;
-    --border: #DDE4F0;
-    --sidebar-w: 240px;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'DM Sans', sans-serif; background: var(--surface); color: var(--text); min-height: 100vh; display: flex; overflow: hidden; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WorkerHub MY — Smart Foreign Worker Compliance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --navy: #0C1B33;
+      --navy2: #142240;
+      --teal: #0ABFBC;
+      --teal2: #07929F;
+      --gold: #F7B731;
+      --red: #FF4757;
+      --green: #2ED573;
+      --orange: #FFA502;
+      --surface: #F0F4FA;
+      --card: #FFFFFF;
+      --text: #1A2744;
+      --muted: #6B7A99;
+      --border: #DDE4F0;
+      --sidebar-w: 240px;
+    }
 
-  /* ── SIDEBAR ── */
-  .sidebar {
-    width: var(--sidebar-w); background: var(--navy); display: flex; flex-direction: column;
-    height: 100vh; position: fixed; left: 0; top: 0; z-index: 100; transition: width .3s;
-  }
-  .sidebar-logo {
-    padding: 24px 20px 18px; border-bottom: 1px solid rgba(255,255,255,.08);
-    display: flex; align-items: center; gap: 10px;
-  }
-  .logo-icon {
-    width: 36px; height: 36px; background: linear-gradient(135deg, var(--teal), var(--teal2));
-    border-radius: 10px; display: flex; align-items: center; justify-content: center;
-    font-size: 18px; flex-shrink: 0;
-  }
-  .logo-text { font-family: 'Syne', sans-serif; font-weight: 800; color: #fff; font-size: 15px; line-height: 1.2; }
-  .logo-sub { font-size: 10px; color: var(--teal); letter-spacing: .05em; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  .nav-section { padding: 16px 12px 0; }
-  .nav-label { font-size: 10px; letter-spacing: .12em; color: rgba(255,255,255,.3); font-weight: 600; padding: 0 8px 8px; text-transform: uppercase; }
-  .nav-item {
-    display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 10px;
-    cursor: pointer; color: rgba(255,255,255,.55); font-size: 14px; font-weight: 500;
-    transition: all .2s; margin-bottom: 2px; position: relative;
-  }
-  .nav-item:hover { background: rgba(255,255,255,.06); color: #fff; }
-  .nav-item.active { background: rgba(10,191,188,.15); color: var(--teal); }
-  .nav-item.active::before {
-    content: ''; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
-    width: 3px; height: 20px; background: var(--teal); border-radius: 0 3px 3px 0;
-  }
-  .nav-icon { font-size: 17px; width: 20px; text-align: center; flex-shrink: 0; }
-  .badge {
-    margin-left: auto; background: var(--red); color: #fff; font-size: 10px;
-    font-weight: 700; border-radius: 20px; padding: 2px 7px; line-height: 1.4;
-  }
-  .badge.warn { background: var(--orange); }
-  .sidebar-bottom {
-    margin-top: auto; padding: 16px 12px; border-top: 1px solid rgba(255,255,255,.08);
-  }
-  .user-card {
-    display: flex; align-items: center; gap: 10px; padding: 10px 8px; border-radius: 10px;
-    cursor: pointer; transition: background .2s;
-  }
-  .user-card:hover { background: rgba(255,255,255,.06); }
-  .avatar {
-    width: 34px; height: 34px; border-radius: 10px;
-    background: linear-gradient(135deg, #F7B731, #ff9f43);
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 13px; color: var(--navy); flex-shrink: 0;
-  }
-  .user-name { font-size: 13px; font-weight: 600; color: #fff; }
-  .user-role { font-size: 11px; color: rgba(255,255,255,.4); }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--surface);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      line-height: 1.5;
+    }
 
-  /* ── MAIN ── */
-  .main { margin-left: var(--sidebar-w); flex: 1; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--navy);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 100;
+      transition: width .3s;
+    }
 
-  /* ── TOPBAR ── */
-  .topbar {
-    background: var(--card); border-bottom: 1px solid var(--border);
-    padding: 0 28px; height: 60px; display: flex; align-items: center; gap: 16px;
-    position: sticky; top: 0; z-index: 50; flex-shrink: 0;
-  }
-  .page-title { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: var(--text); flex: 1; }
-  .topbar-search {
-    display: flex; align-items: center; gap: 8px; background: var(--surface);
-    border: 1px solid var(--border); border-radius: 10px; padding: 7px 14px;
-    font-size: 13px; color: var(--muted); width: 220px; cursor: pointer;
-  }
-  .btn {
-    padding: 8px 16px; border-radius: 10px; font-size: 13px; font-weight: 600;
-    border: none; cursor: pointer; transition: all .2s; font-family: 'DM Sans', sans-serif;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .btn-primary { background: var(--teal); color: #fff; }
-  .btn-primary:hover { background: var(--teal2); transform: translateY(-1px); }
-  .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--border); }
-  .btn-ghost:hover { background: var(--surface); color: var(--text); }
-  .notif-btn {
-    width: 38px; height: 38px; border-radius: 10px; background: var(--surface);
-    border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
-    cursor: pointer; position: relative; font-size: 16px; transition: background .2s;
-  }
-  .notif-btn:hover { background: var(--border); }
-  .notif-dot {
-    position: absolute; top: 6px; right: 6px; width: 8px; height: 8px;
-    background: var(--red); border-radius: 50%; border: 2px solid var(--card);
-  }
-  .lang-toggle {
-    display: flex; background: var(--surface); border: 1px solid var(--border);
-    border-radius: 8px; overflow: hidden;
-  }
-  .lang-btn {
-    padding: 6px 10px; font-size: 11px; font-weight: 700; cursor: pointer;
-    transition: all .2s; color: var(--muted); background: none; border: none; font-family: 'DM Sans', sans-serif;
-  }
-  .lang-btn.active { background: var(--navy); color: #fff; }
+    .sidebar-logo {
+      padding: 24px 20px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, .08);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-  /* ── CONTENT ── */
-  .content { flex: 1; overflow-y: auto; padding: 24px 28px; }
-  .content.no-pad { padding: 0; }
-  .page { display: none; }
-  .page.active { display: block; }
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--teal), var(--teal2));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
 
-  /* ── STAT CARDS ── */
-  .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
-  .stat-card {
-    background: var(--card); border-radius: 14px; padding: 20px;
-    border: 1px solid var(--border); position: relative; overflow: hidden; cursor: pointer;
-    transition: all .25s;
-  }
-  .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10,191,188,.1); }
-  .stat-card::after {
-    content: ''; position: absolute; right: -20px; top: -20px;
-    width: 80px; height: 80px; border-radius: 50%; opacity: .08;
-  }
-  .stat-card.blue::after { background: var(--teal); }
-  .stat-card.red::after { background: var(--red); }
-  .stat-card.orange::after { background: var(--orange); }
-  .stat-card.green::after { background: var(--green); }
-  .stat-label { font-size: 12px; color: var(--muted); font-weight: 500; margin-bottom: 8px; }
-  .stat-val { font-family: 'Syne', sans-serif; font-size: 28px; font-weight: 800; color: var(--text); }
-  .stat-sub { font-size: 12px; color: var(--muted); margin-top: 4px; }
-  .stat-icon { position: absolute; right: 18px; top: 18px; font-size: 22px; }
+    .logo-text {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      color: #fff;
+      font-size: 15px;
+      line-height: 1.2;
+    }
 
-  /* ── TABLE ── */
-  .card { background: var(--card); border-radius: 14px; border: 1px solid var(--border); overflow: hidden; }
-  .card-header {
-    padding: 18px 20px; border-bottom: 1px solid var(--border);
-    display: flex; align-items: center; gap: 12px;
-  }
-  .card-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; flex: 1; }
-  table { width: 100%; border-collapse: collapse; }
-  th {
-    padding: 10px 16px; text-align: left; font-size: 11px; font-weight: 700;
-    letter-spacing: .06em; text-transform: uppercase; color: var(--muted);
-    background: var(--surface); border-bottom: 1px solid var(--border);
-  }
-  td { padding: 13px 16px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: rgba(10,191,188,.03); }
-  .worker-name { font-weight: 600; color: var(--text); }
-  .worker-id { font-size: 11px; color: var(--muted); margin-top: 2px; }
-  .status-pill {
-    display: inline-flex; align-items: center; gap: 5px;
-    padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700;
-  }
-  .status-pill::before { content: ''; width: 6px; height: 6px; border-radius: 50%; }
-  .status-active { background: rgba(46,213,115,.1); color: #1a8a4a; }
-  .status-active::before { background: var(--green); }
-  .status-expiring { background: rgba(255,165,2,.12); color: #b37600; }
-  .status-expiring::before { background: var(--orange); }
-  .status-expired { background: rgba(255,71,87,.1); color: var(--red); }
-  .status-expired::before { background: var(--red); }
-  .flag { font-size: 18px; }
-  .permit-type {
-    background: rgba(12,27,51,.07); padding: 3px 9px; border-radius: 6px;
-    font-size: 11px; font-weight: 700; color: var(--navy2);
-  }
-  .days-left { font-weight: 700; }
-  .days-red { color: var(--red); }
-  .days-orange { color: var(--orange); }
-  .days-green { color: #1a8a4a; }
-  .search-filter {
-    display: flex; gap: 10px; padding: 14px 20px; border-bottom: 1px solid var(--border);
-    background: #fafcff;
-  }
-  .search-input {
-    flex: 1; padding: 8px 14px; border: 1px solid var(--border); border-radius: 8px;
-    font-size: 13px; font-family: 'DM Sans', sans-serif; outline: none; color: var(--text);
-    background: #fff;
-  }
-  .search-input:focus { border-color: var(--teal); }
-  .filter-select {
-    padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px;
-    font-size: 13px; font-family: 'DM Sans', sans-serif; outline: none; color: var(--text);
-    background: #fff; cursor: pointer;
-  }
-  .filter-select:focus { border-color: var(--teal); }
-  .action-btn {
-    width: 30px; height: 30px; border-radius: 7px; border: 1px solid var(--border);
-    background: none; cursor: pointer; font-size: 14px; transition: all .2s;
-    display: inline-flex; align-items: center; justify-content: center;
-  }
-  .action-btn:hover { background: var(--surface); border-color: var(--teal); }
+    .logo-sub {
+      font-size: 10px;
+      color: var(--teal);
+      letter-spacing: .05em;
+    }
 
-  /* ── DASHBOARD GRID ── */
-  .dash-grid { display: grid; grid-template-columns: 1fr 360px; gap: 16px; }
-  .dash-left { display: flex; flex-direction: column; gap: 16px; }
+    .nav-section {
+      padding: 16px 12px 0;
+    }
 
-  /* ── ALERT LIST ── */
-  .alert-list { display: flex; flex-direction: column; gap: 10px; padding: 16px; }
-  .alert-item {
-    display: flex; align-items: flex-start; gap: 12px; padding: 12px 14px;
-    border-radius: 10px; border: 1px solid; animation: slideIn .3s ease;
-  }
-  @keyframes slideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
-  .alert-item.urgent { background: rgba(255,71,87,.05); border-color: rgba(255,71,87,.25); }
-  .alert-item.warn { background: rgba(255,165,2,.06); border-color: rgba(255,165,2,.25); }
-  .alert-item.info { background: rgba(10,191,188,.06); border-color: rgba(10,191,188,.2); }
-  .alert-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
-  .alert-title { font-size: 13px; font-weight: 600; color: var(--text); }
-  .alert-desc { font-size: 12px; color: var(--muted); margin-top: 2px; line-height: 1.5; }
-  .alert-time { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .nav-label {
+      font-size: 11px;
+      letter-spacing: .12em;
+      color: rgba(255, 255, 255, .3);
+      font-weight: 600;
+      padding: 0 8px 8px;
+      text-transform: uppercase;
+    }
 
-  /* ── CHAT ── */
-  .chat-wrap { display: flex; height: calc(100vh - 60px); }
-  .chat-sidebar {
-    width: 280px; border-right: 1px solid var(--border); display: flex; flex-direction: column;
-    background: var(--card); flex-shrink: 0;
-  }
-  .chat-sidebar-header { padding: 18px 16px; border-bottom: 1px solid var(--border); }
-  .chat-sidebar-title { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 4px; }
-  .chat-sidebar-sub { font-size: 12px; color: var(--muted); }
-  .quick-prompts { padding: 14px 12px; flex: 1; overflow-y: auto; }
-  .qp-label { font-size: 11px; font-weight: 700; letter-spacing: .08em; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; padding: 0 4px; }
-  .qp-btn {
-    width: 100%; text-align: left; padding: 10px 12px; border-radius: 10px;
-    border: 1px solid var(--border); background: #fff; font-size: 12px; font-weight: 500;
-    color: var(--text); cursor: pointer; margin-bottom: 6px; transition: all .2s;
-    font-family: 'DM Sans', sans-serif; line-height: 1.4;
-  }
-  .qp-btn:hover { background: var(--surface); border-color: var(--teal); color: var(--teal2); }
-  .chat-context {
-    padding: 12px; border-top: 1px solid var(--border);
-  }
-  .context-tag {
-    display: inline-flex; align-items: center; gap: 5px; background: rgba(10,191,188,.1);
-    color: var(--teal2); border-radius: 6px; padding: 4px 10px; font-size: 11px; font-weight: 600;
-  }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      color: rgba(255, 255, 255, .55);
+      font-size: 14px;
+      font-weight: 500;
+      transition: all .2s;
+      margin-bottom: 2px;
+      position: relative;
+    }
 
-  .chat-main { flex: 1; display: flex; flex-direction: column; background: var(--surface); }
-  .chat-header {
-    background: var(--card); border-bottom: 1px solid var(--border);
-    padding: 14px 20px; display: flex; align-items: center; gap: 12px;
-  }
-  .ai-avatar {
-    width: 38px; height: 38px; border-radius: 12px;
-    background: linear-gradient(135deg, var(--teal), var(--navy2));
-    display: flex; align-items: center; justify-content: center; font-size: 18px;
-    flex-shrink: 0;
-  }
-  .ai-name { font-weight: 700; font-size: 14px; }
-  .ai-status { font-size: 12px; color: var(--green); display: flex; align-items: center; gap: 5px; }
-  .ai-status::before { content: ''; width: 7px; height: 7px; background: var(--green); border-radius: 50%; }
-  .powered-badge {
-    margin-left: auto; background: var(--navy); color: var(--teal); font-size: 11px;
-    font-weight: 700; padding: 4px 10px; border-radius: 6px; letter-spacing: .04em;
-  }
+    .nav-item:hover {
+      background: rgba(255, 255, 255, .06);
+      color: #fff;
+    }
 
-  .messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 16px; }
-  .msg { display: flex; gap: 10px; max-width: 80%; }
-  .msg.user { align-self: flex-end; flex-direction: row-reverse; }
-  .msg-bubble {
-    padding: 12px 16px; border-radius: 16px; font-size: 13.5px; line-height: 1.6;
-  }
-  .msg.bot .msg-bubble {
-    background: var(--card); border: 1px solid var(--border); color: var(--text);
-    border-radius: 4px 16px 16px 16px;
-  }
-  .msg.user .msg-bubble {
-    background: var(--teal); color: #fff;
-    border-radius: 16px 4px 16px 16px;
-  }
-  .msg-avatar {
-    width: 32px; height: 32px; border-radius: 10px; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center; font-size: 14px;
-  }
-  .msg.bot .msg-avatar { background: linear-gradient(135deg, var(--teal), var(--navy2)); }
-  .msg.user .msg-avatar { background: linear-gradient(135deg, var(--gold), #ff9f43); color: var(--navy); font-weight: 700; font-size: 12px; }
-  .msg-time { font-size: 11px; color: var(--muted); margin-top: 4px; text-align: right; }
-  .msg.user .msg-time { text-align: left; }
-  .msg-meta { display: flex; flex-direction: column; }
+    .nav-item.active {
+      background: rgba(10, 191, 188, .15);
+      color: var(--teal);
+    }
 
-  .source-chip {
-    display: inline-flex; align-items: center; gap: 4px; background: var(--surface);
-    border: 1px solid var(--border); border-radius: 6px; padding: 3px 8px;
-    font-size: 11px; color: var(--muted); margin-top: 8px; margin-right: 4px;
-  }
+    .nav-item.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 20px;
+      background: var(--teal);
+      border-radius: 0 3px 3px 0;
+    }
 
-  .typing-indicator {
-    display: flex; align-items: center; gap: 8px; padding: 12px 16px;
-    background: var(--card); border: 1px solid var(--border); border-radius: 4px 16px 16px 16px;
-    width: fit-content;
-  }
-  .typing-dot {
-    width: 7px; height: 7px; background: var(--teal); border-radius: 50%;
-    animation: bounce 1.2s infinite ease;
-  }
-  .typing-dot:nth-child(2) { animation-delay: .2s; }
-  .typing-dot:nth-child(3) { animation-delay: .4s; }
-  @keyframes bounce {
-    0%,80%,100% { transform: translateY(0); }
-    40% { transform: translateY(-6px); }
-  }
+    .nav-icon {
+      font-size: 17px;
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
 
-  .chat-input-area {
-    padding: 16px 20px; background: var(--card); border-top: 1px solid var(--border);
-  }
-  .upload-preview {
-    display: none; align-items: center; gap: 8px; padding: 8px 12px;
-    background: rgba(10,191,188,.08); border-radius: 8px; margin-bottom: 10px;
-    border: 1px dashed var(--teal);
-  }
-  .upload-preview.visible { display: flex; }
-  .upload-preview-name { font-size: 12px; font-weight: 600; color: var(--teal2); flex: 1; }
-  .remove-upload { cursor: pointer; color: var(--red); font-size: 14px; }
-  .chat-input-row { display: flex; gap: 10px; align-items: flex-end; }
-  .chat-input {
-    flex: 1; padding: 12px 16px; border: 1px solid var(--border); border-radius: 12px;
-    font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none; resize: none;
-    line-height: 1.5; background: var(--surface); color: var(--text); max-height: 120px;
-    transition: border-color .2s;
-  }
-  .chat-input:focus { border-color: var(--teal); background: #fff; }
-  .attach-btn {
-    width: 42px; height: 42px; border-radius: 10px; border: 1px solid var(--border);
-    background: var(--surface); cursor: pointer; font-size: 18px; transition: all .2s;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .attach-btn:hover { background: var(--border); }
-  .send-btn {
-    width: 42px; height: 42px; border-radius: 10px; background: var(--teal);
-    border: none; cursor: pointer; font-size: 18px; transition: all .2s;
-    display: flex; align-items: center; justify-content: center; color: #fff;
-  }
-  .send-btn:hover { background: var(--teal2); transform: scale(1.05); }
-  .hint-text { font-size: 11px; color: var(--muted); margin-top: 8px; text-align: center; }
+    .badge {
+      margin-left: auto;
+      background: var(--red);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 20px;
+      padding: 2px 7px;
+      line-height: 1.4;
+    }
 
-  /* ── DOCUMENTS ── */
-  .doc-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 20px; }
-  .doc-card {
-    border: 1px solid var(--border); border-radius: 12px; overflow: hidden;
-    transition: all .25s; cursor: pointer; background: var(--card);
-  }
-  .doc-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,.08); border-color: var(--teal); }
-  .doc-thumb {
-    height: 100px; display: flex; align-items: center; justify-content: center;
-    font-size: 40px;
-  }
-  .doc-thumb.pdf { background: rgba(255,71,87,.08); }
-  .doc-thumb.img { background: rgba(10,191,188,.08); }
-  .doc-thumb.word { background: rgba(69,123,255,.08); }
-  .doc-info { padding: 12px 14px; border-top: 1px solid var(--border); }
-  .doc-name { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .doc-meta { font-size: 11px; color: var(--muted); }
-  .doc-tag { display: inline-block; background: var(--surface); border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; font-size: 10px; font-weight: 600; color: var(--muted); margin-top: 6px; }
+    .badge.warn {
+      background: var(--orange);
+    }
 
-  .upload-zone {
-    margin: 20px; border: 2px dashed var(--border); border-radius: 14px;
-    padding: 32px; text-align: center; transition: all .25s; cursor: pointer;
-    background: #fafcff;
-  }
-  .upload-zone:hover, .upload-zone.dragging { border-color: var(--teal); background: rgba(10,191,188,.04); }
-  .upload-zone-icon { font-size: 36px; margin-bottom: 10px; }
-  .upload-zone-title { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
-  .upload-zone-sub { font-size: 13px; color: var(--muted); }
+    .sidebar-bottom {
+      margin-top: auto;
+      padding: 16px 12px;
+      border-top: 1px solid rgba(255, 255, 255, .08);
+    }
 
-  /* ── ALERTS PAGE ── */
-  .alert-page-list { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
-  .big-alert {
-    display: flex; align-items: flex-start; gap: 16px; padding: 16px 18px;
-    border-radius: 12px; border: 1px solid; transition: all .2s; cursor: pointer;
-  }
-  .big-alert:hover { transform: translateX(3px); }
-  .big-alert.urgent { background: rgba(255,71,87,.04); border-color: rgba(255,71,87,.3); }
-  .big-alert.warn { background: rgba(255,165,2,.04); border-color: rgba(255,165,2,.3); }
-  .big-alert.info { background: rgba(10,191,188,.04); border-color: rgba(10,191,188,.2); }
-  .big-alert.done { background: rgba(46,213,115,.04); border-color: rgba(46,213,115,.2); opacity: .7; }
-  .ba-icon { font-size: 26px; flex-shrink: 0; }
-  .ba-content { flex: 1; }
-  .ba-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-  .ba-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
-  .ba-meta { display: flex; gap: 10px; margin-top: 8px; align-items: center; flex-wrap: wrap; }
-  .ba-tag { background: var(--surface); border: 1px solid var(--border); border-radius: 6px; padding: 3px 9px; font-size: 11px; font-weight: 600; color: var(--muted); }
-  .ba-time { font-size: 11px; color: var(--muted); margin-left: auto; }
-  .ba-actions { display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+    .user-card {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 8px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background .2s;
+    }
 
-  /* ── MODAL ── */
-  .modal-overlay {
-    display: none; position: fixed; inset: 0; background: rgba(12,27,51,.5);
-    z-index: 500; align-items: center; justify-content: center; backdrop-filter: blur(4px);
-  }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--card); border-radius: 18px; padding: 28px; width: 480px;
-    max-width: 95vw; animation: modalIn .25s ease; border: 1px solid var(--border);
-    box-shadow: 0 20px 60px rgba(0,0,0,.15);
-  }
-  @keyframes modalIn { from { opacity: 0; transform: scale(.96) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-  .modal-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; margin-bottom: 18px; }
-  .form-group { margin-bottom: 16px; }
-  .form-label { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; display: block; }
-  .form-input {
-    width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 9px;
-    font-size: 13px; font-family: 'DM Sans', sans-serif; outline: none; color: var(--text);
-    transition: border-color .2s;
-  }
-  .form-input:focus { border-color: var(--teal); }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-  .modal-actions { display: flex; gap: 10px; margin-top: 22px; }
-  .modal-actions .btn { flex: 1; justify-content: center; }
+    .user-card:hover {
+      background: rgba(255, 255, 255, .06);
+    }
 
-  /* ── MINI CHART ── */
-  .mini-bar-chart { display: flex; align-items: flex-end; gap: 4px; height: 50px; padding: 0 4px; }
-  .bar {
-    flex: 1; background: rgba(10,191,188,.15); border-radius: 4px 4px 0 0;
-    transition: background .2s; cursor: pointer;
-  }
-  .bar:hover { background: rgba(10,191,188,.4); }
-  .bar.active { background: var(--teal); }
-  .chart-labels { display: flex; gap: 4px; padding: 4px 4px 0; }
-  .chart-label { flex: 1; font-size: 9px; text-align: center; color: var(--muted); font-weight: 600; }
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #F7B731, #ff9f43);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--navy);
+      flex-shrink: 0;
+    }
 
-  /* ── SCROLLBAR ── */
-  ::-webkit-scrollbar { width: 5px; height: 5px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
-  ::-webkit-scrollbar-thumb:hover { background: var(--muted); }
+    .user-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #fff;
+    }
 
-  /* ── TOAST ── */
-  .toast {
-    position: fixed; bottom: 24px; right: 24px; background: var(--navy);
-    color: #fff; padding: 12px 20px; border-radius: 12px; font-size: 13px;
-    font-weight: 500; z-index: 999; opacity: 0; transform: translateY(20px);
-    transition: all .3s; display: flex; align-items: center; gap: 10px;
-    box-shadow: 0 8px 24px rgba(0,0,0,.2); max-width: 320px;
-  }
-  .toast.show { opacity: 1; transform: translateY(0); }
-  .toast-icon { font-size: 18px; }
+    .user-role {
+      font-size: 12px;
+      color: rgba(255, 255, 255, .4);
+    }
 
-  /* ── ONBOARDING PILL ── */
-  .bluesmall-pill {
-    display: inline-flex; align-items: center; gap: 6px; background: rgba(10,191,188,.1);
-    border: 1px solid rgba(10,191,188,.3); border-radius: 20px; padding: 5px 12px;
-    font-size: 12px; color: var(--teal2); font-weight: 600; margin-bottom: 16px;
-  }
+    /* ── MAIN ── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
 
-  /* ── RESPONSIVE NOTE ── */
-  .chart-container { padding: 0 16px 16px; }
-</style>
+    /* ── TOPBAR ── */
+    .topbar {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 0 28px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      flex-shrink: 0;
+    }
+
+    .page-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      flex: 1;
+    }
+
+    .topbar-search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 7px 14px;
+      font-size: 13px;
+      color: var(--muted);
+      width: 220px;
+      cursor: pointer;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all .2s;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-primary {
+      background: var(--teal);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      background: var(--teal2);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    .notif-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      font-size: 16px;
+      transition: background .2s;
+    }
+
+    .notif-btn:hover {
+      background: var(--border);
+    }
+
+    .notif-dot {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 8px;
+      height: 8px;
+      background: var(--red);
+      border-radius: 50%;
+      border: 2px solid var(--card);
+    }
+
+    .lang-toggle {
+      display: flex;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .lang-btn {
+      padding: 6px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .2s;
+      color: var(--muted);
+      background: none;
+      border: none;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .lang-btn.active {
+      background: var(--navy);
+      color: #fff;
+    }
+
+    /* ── CONTENT ── */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px 28px;
+    }
+
+    .content.no-pad {
+      padding: 0;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* ── STAT CARDS ── */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border-radius: 14px;
+      padding: 20px;
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all .25s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(10, 191, 188, .1);
+    }
+
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      right: -20px;
+      top: -20px;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      opacity: .08;
+    }
+
+    .stat-card.blue::after {
+      background: var(--teal);
+    }
+
+    .stat-card.red::after {
+      background: var(--red);
+    }
+
+    .stat-card.orange::after {
+      background: var(--orange);
+    }
+
+    .stat-card.green::after {
+      background: var(--green);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .stat-val {
+      font-family: 'Syne', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .stat-sub {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .stat-icon {
+      position: absolute;
+      right: 18px;
+      top: 18px;
+      font-size: 22px;
+    }
+
+    /* ── TABLE ── */
+    .card {
+      background: var(--card);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .card-header {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      flex: 1;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      padding: 10px 16px;
+      text-align: left;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+    }
+
+    td {
+      padding: 13px 16px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: rgba(10, 191, 188, .03);
+    }
+
+    .worker-name {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .worker-id {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .status-pill::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .status-active {
+      background: rgba(46, 213, 115, .1);
+      color: #1a8a4a;
+    }
+
+    .status-active::before {
+      background: var(--green);
+    }
+
+    .status-expiring {
+      background: rgba(255, 165, 2, .12);
+      color: #b37600;
+    }
+
+    .status-expiring::before {
+      background: var(--orange);
+    }
+
+    .status-expired {
+      background: rgba(255, 71, 87, .1);
+      color: var(--red);
+    }
+
+    .status-expired::before {
+      background: var(--red);
+    }
+
+    .flag {
+      font-size: 18px;
+    }
+
+    .permit-type {
+      background: rgba(12, 27, 51, .07);
+      padding: 3px 9px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--navy2);
+    }
+
+    .days-left {
+      font-weight: 700;
+    }
+
+    .days-red {
+      color: var(--red);
+    }
+
+    .days-orange {
+      color: var(--orange);
+    }
+
+    .days-green {
+      color: #1a8a4a;
+    }
+
+    .search-filter {
+      display: flex;
+      gap: 10px;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+      background: #fafcff;
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 8px 14px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      color: var(--text);
+      background: #fff;
+    }
+
+    .search-input:focus {
+      border-color: var(--teal);
+    }
+
+    .filter-select {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      color: var(--text);
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .filter-select:focus {
+      border-color: var(--teal);
+    }
+
+    .action-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: none;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all .2s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .action-btn:hover {
+      background: var(--surface);
+      border-color: var(--teal);
+    }
+
+    /* ── DASHBOARD GRID ── */
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 16px;
+    }
+
+    .dash-left {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* ── ALERT LIST ── */
+    .alert-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 16px;
+    }
+
+    .alert-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid;
+      animation: slideIn .3s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .alert-item.urgent {
+      background: rgba(255, 71, 87, .05);
+      border-color: rgba(255, 71, 87, .25);
+    }
+
+    .alert-item.warn {
+      background: rgba(255, 165, 2, .06);
+      border-color: rgba(255, 165, 2, .25);
+    }
+
+    .alert-item.info {
+      background: rgba(10, 191, 188, .06);
+      border-color: rgba(10, 191, 188, .2);
+    }
+
+    .alert-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .alert-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .alert-desc {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+      line-height: 1.5;
+    }
+
+    .alert-time {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ── CHAT ── */
+    .chat-wrap {
+      display: flex;
+      height: calc(100vh - 60px);
+    }
+
+    .chat-sidebar {
+      width: 280px;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      background: var(--card);
+      flex-shrink: 0;
+    }
+
+    .chat-sidebar-header {
+      padding: 18px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .chat-sidebar-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .chat-sidebar-sub {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .quick-prompts {
+      padding: 14px 12px;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .qp-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      padding: 0 4px;
+    }
+
+    .qp-btn {
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #fff;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      margin-bottom: 6px;
+      transition: all .2s;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.4;
+    }
+
+    .qp-btn:hover {
+      background: var(--surface);
+      border-color: var(--teal);
+      color: var(--teal2);
+    }
+
+    .chat-context {
+      padding: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .context-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: rgba(10, 191, 188, .1);
+      color: var(--teal2);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .chat-main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--surface);
+    }
+
+    .chat-header {
+      background: var(--card);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .ai-avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--teal), var(--navy2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+
+    .ai-name {
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    .ai-status {
+      font-size: 12px;
+      color: var(--green);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .ai-status::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      background: var(--green);
+      border-radius: 50%;
+    }
+
+    .powered-badge {
+      margin-left: auto;
+      background: var(--navy);
+      color: var(--teal);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: .04em;
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .msg {
+      display: flex;
+      gap: 10px;
+      max-width: 80%;
+    }
+
+    .msg.user {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+
+    .msg-bubble {
+      padding: 12px 16px;
+      border-radius: 16px;
+      font-size: 13.5px;
+      line-height: 1.6;
+    }
+
+    .msg.bot .msg-bubble {
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 4px 16px 16px 16px;
+    }
+
+    .msg.user .msg-bubble {
+      background: var(--teal);
+      color: #fff;
+      border-radius: 16px 4px 16px 16px;
+    }
+
+    .msg-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .msg.bot .msg-avatar {
+      background: linear-gradient(135deg, var(--teal), var(--navy2));
+    }
+
+    .msg.user .msg-avatar {
+      background: linear-gradient(135deg, var(--gold), #ff9f43);
+      color: var(--navy);
+      font-weight: 700;
+      font-size: 12px;
+    }
+
+    .msg-time {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+      text-align: right;
+    }
+
+    .msg.user .msg-time {
+      text-align: left;
+    }
+
+    .msg-meta {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .source-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 8px;
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 8px;
+      margin-right: 4px;
+    }
+
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px 16px 16px 16px;
+      width: fit-content;
+    }
+
+    .typing-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--teal);
+      border-radius: 50%;
+      animation: bounce 1.2s infinite ease;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: .2s;
+    }
+
+    .typing-dot:nth-child(3) {
+      animation-delay: .4s;
+    }
+
+    @keyframes bounce {
+
+      0%,
+      80%,
+      100% {
+        transform: translateY(0);
+      }
+
+      40% {
+        transform: translateY(-6px);
+      }
+    }
+
+    .chat-input-area {
+      padding: 16px 20px;
+      background: var(--card);
+      border-top: 1px solid var(--border);
+    }
+
+    .upload-preview {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: rgba(10, 191, 188, .08);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      border: 1px dashed var(--teal);
+    }
+
+    .upload-preview.visible {
+      display: flex;
+    }
+
+    .upload-preview-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--teal2);
+      flex: 1;
+    }
+
+    .remove-upload {
+      cursor: pointer;
+      color: var(--red);
+      font-size: 14px;
+    }
+
+    .chat-input-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-end;
+    }
+
+    .chat-input {
+      flex: 1;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      resize: none;
+      line-height: 1.5;
+      background: var(--surface);
+      color: var(--text);
+      max-height: 120px;
+      transition: border-color .2s;
+    }
+
+    .chat-input:focus {
+      border-color: var(--teal);
+      background: #fff;
+    }
+
+    .attach-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      cursor: pointer;
+      font-size: 18px;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .attach-btn:hover {
+      background: var(--border);
+    }
+
+    .send-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: var(--teal);
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+    }
+
+    .send-btn:hover {
+      background: var(--teal2);
+      transform: scale(1.05);
+    }
+
+    .hint-text {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 8px;
+      text-align: center;
+    }
+
+    /* ── DOCUMENTS ── */
+    .doc-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      padding: 20px;
+    }
+
+    .doc-card {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all .25s;
+      cursor: pointer;
+      background: var(--card);
+    }
+
+    .doc-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .08);
+      border-color: var(--teal);
+    }
+
+    .doc-thumb {
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+    }
+
+    .doc-thumb.pdf {
+      background: rgba(255, 71, 87, .08);
+    }
+
+    .doc-thumb.img {
+      background: rgba(10, 191, 188, .08);
+    }
+
+    .doc-thumb.word {
+      background: rgba(69, 123, 255, .08);
+    }
+
+    .doc-info {
+      padding: 12px 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    .doc-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .doc-meta {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .doc-tag {
+      display: inline-block;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    .upload-zone {
+      margin: 20px;
+      border: 2px dashed var(--border);
+      border-radius: 14px;
+      padding: 32px;
+      text-align: center;
+      transition: all .25s;
+      cursor: pointer;
+      background: #fafcff;
+    }
+
+    .upload-zone:hover,
+    .upload-zone.dragging {
+      border-color: var(--teal);
+      background: rgba(10, 191, 188, .04);
+    }
+
+    .upload-zone-icon {
+      font-size: 36px;
+      margin-bottom: 10px;
+    }
+
+    .upload-zone-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .upload-zone-sub {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* ── ALERTS PAGE ── */
+    .alert-page-list {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .big-alert {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 16px 18px;
+      border-radius: 12px;
+      border: 1px solid;
+      transition: all .2s;
+      cursor: pointer;
+    }
+
+    .big-alert:hover {
+      transform: translateX(3px);
+    }
+
+    .big-alert.urgent {
+      background: rgba(255, 71, 87, .04);
+      border-color: rgba(255, 71, 87, .3);
+    }
+
+    .big-alert.warn {
+      background: rgba(255, 165, 2, .04);
+      border-color: rgba(255, 165, 2, .3);
+    }
+
+    .big-alert.info {
+      background: rgba(10, 191, 188, .04);
+      border-color: rgba(10, 191, 188, .2);
+    }
+
+    .big-alert.done {
+      background: rgba(46, 213, 115, .04);
+      border-color: rgba(46, 213, 115, .2);
+      opacity: .7;
+    }
+
+    .ba-icon {
+      font-size: 26px;
+      flex-shrink: 0;
+    }
+
+    .ba-content {
+      flex: 1;
+    }
+
+    .ba-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+
+    .ba-desc {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .ba-meta {
+      display: flex;
+      gap: 10px;
+      margin-top: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .ba-tag {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 3px 9px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .ba-time {
+      font-size: 11px;
+      color: var(--muted);
+      margin-left: auto;
+    }
+
+    .ba-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-end;
+    }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(12, 27, 51, .5);
+      z-index: 500;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--card);
+      border-radius: 18px;
+      padding: 28px;
+      width: 480px;
+      max-width: 95vw;
+      animation: modalIn .25s ease;
+      border: 1px solid var(--border);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, .15);
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity: 0;
+        transform: scale(.96) translateY(10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .modal-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 18px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      font-size: 13px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      color: var(--text);
+      transition: border-color .2s;
+    }
+
+    .form-input:focus {
+      border-color: var(--teal);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .modal-actions .btn {
+      flex: 1;
+      justify-content: center;
+    }
+
+    /* ── MINI CHART ── */
+    .mini-bar-chart {
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+      height: 50px;
+      padding: 0 4px;
+    }
+
+    .bar {
+      flex: 1;
+      background: rgba(10, 191, 188, .15);
+      border-radius: 4px 4px 0 0;
+      transition: background .2s;
+      cursor: pointer;
+    }
+
+    .bar:hover {
+      background: rgba(10, 191, 188, .4);
+    }
+
+    .bar.active {
+      background: var(--teal);
+    }
+
+    .chart-labels {
+      display: flex;
+      gap: 4px;
+      padding: 4px 4px 0;
+    }
+
+    .chart-label {
+      flex: 1;
+      font-size: 9px;
+      text-align: center;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 99px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--muted);
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--navy);
+      color: #fff;
+      padding: 12px 20px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 500;
+      z-index: 999;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all .3s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, .2);
+      max-width: 320px;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast-icon {
+      font-size: 18px;
+    }
+
+    /* ── ONBOARDING PILL ── */
+    .bluesmall-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(10, 191, 188, .1);
+      border: 1px solid rgba(10, 191, 188, .3);
+      border-radius: 20px;
+      padding: 5px 12px;
+      font-size: 12px;
+      color: var(--teal2);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    /* ── RESPONSIVE NOTE ── */
+    .chart-container {
+      padding: 0 16px 16px;
+    }
+  </style>
 </head>
+
 <body>
 
-<!-- SIDEBAR -->
-<aside class="sidebar">
-  <div class="sidebar-logo">
-    <div class="logo-icon">🏢</div>
-    <div>
-      <div class="logo-text">WorkerHub<span style="color:var(--teal)"> MY</span></div>
-      <div class="logo-sub">Powered by Zetrix AI</div>
-    </div>
-  </div>
-
-  <div class="nav-section">
-    <div class="nav-label">Main Menu</div>
-    <div class="nav-item active" onclick="switchPage('dashboard',this)">
-      <span class="nav-icon">⚡</span> Dashboard
-    </div>
-    <div class="nav-item" onclick="switchPage('workers',this)">
-      <span class="nav-icon">👷</span> Workers
-      <span class="badge warn">3</span>
-    </div>
-    <div class="nav-item" onclick="switchPage('ai',this)">
-      <span class="nav-icon">🤖</span> AI Assistant
-    </div>
-    <div class="nav-item" onclick="switchPage('documents',this)">
-      <span class="nav-icon">📂</span> Documents
-    </div>
-    <div class="nav-item" onclick="switchPage('alerts',this)">
-      <span class="nav-icon">🔔</span> Alerts
-      <span class="badge">5</span>
-    </div>
-  </div>
-
-  <div class="nav-section" style="margin-top:20px">
-    <div class="nav-label">System</div>
-    <div class="nav-item" onclick="showToast('⚙️ Settings coming soon in full build')">
-      <span class="nav-icon">⚙️</span> Settings
-    </div>
-    <div class="nav-item" onclick="showToast('📊 Reports module — Q3 roadmap')">
-      <span class="nav-icon">📊</span> Reports
-    </div>
-  </div>
-
-  <div class="sidebar-bottom">
-    <div class="user-card">
-      <div class="avatar">LMH</div>
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-icon">🏢</div>
       <div>
-        <div class="user-name">Lee Min Ho</div>
-        <div class="user-role">HR Manager · Admin</div>
-      </div>
-    </div>
-  </div>
-</aside>
-
-<!-- MAIN -->
-<div class="main">
-
-  <!-- TOPBAR -->
-  <header class="topbar">
-    <div class="page-title" id="topbarTitle">Dashboard</div>
-    <div class="topbar-search">🔍 &nbsp;Search workers, docs…</div>
-    <div class="lang-toggle">
-      <button class="lang-btn active" onclick="toggleLang('EN',this)">EN</button>
-      <button class="lang-btn" onclick="toggleLang('BM',this)">BM</button>
-    </div>
-    <div class="notif-btn" onclick="switchPage('alerts', document.querySelector('[onclick*=alerts]'))">
-      🔔<span class="notif-dot"></span>
-    </div>
-    <button class="btn btn-primary" id="topbarAction" onclick="openModal()">+ Add Worker</button>
-  </header>
-
-  <!-- CONTENT -->
-  <div class="content" id="mainContent">
-
-    <!-- ── DASHBOARD ── -->
-    <div class="page active" id="page-dashboard">
-      <div class="bluesmall-pill">⚡ Connected to Smart WorkerHub</div>
-
-      <div class="stats-row">
-        <div class="stat-card blue" onclick="switchPage('workers', document.querySelectorAll('.nav-item')[1])">
-          <div class="stat-label">Total Workers</div>
-          <div class="stat-val">142</div>
-          <div class="stat-sub">↑ 4 this month</div>
-          <div class="stat-icon">👷</div>
-        </div>
-        <div class="stat-card red" onclick="switchPage('alerts', document.querySelectorAll('.nav-item')[4])">
-          <div class="stat-label">Expiring ≤ 30 Days</div>
-          <div class="stat-val" style="color:var(--red)">7</div>
-          <div class="stat-sub">Action required</div>
-          <div class="stat-icon">⚠️</div>
-        </div>
-        <div class="stat-card orange">
-          <div class="stat-label">Pending FOMEMA</div>
-          <div class="stat-val" style="color:var(--orange)">12</div>
-          <div class="stat-sub">3 overdue</div>
-          <div class="stat-icon">🏥</div>
-        </div>
-        <div class="stat-card green">
-          <div class="stat-label">Compliant Workers</div>
-          <div class="stat-val" style="color:#1a8a4a">123</div>
-          <div class="stat-sub">86.6% compliance</div>
-          <div class="stat-icon">✅</div>
-        </div>
-      </div>
-
-      <div class="dash-grid">
-        <div class="dash-left">
-          <!-- PERMIT EXPIRY CHART -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">📅 Permit Expiry — Next 6 Months</div>
-              <button class="btn btn-ghost" style="font-size:12px; padding:6px 12px;" onclick="showToast('📊 Full report exported')">Export</button>
-            </div>
-            <div class="chart-container">
-              <div style="padding:16px 0 4px; display:flex; align-items:baseline; gap:8px;">
-                <span style="font-family:Syne; font-size:22px; font-weight:800;">31</span>
-                <span style="font-size:13px; color:var(--muted)">permits expiring in next 180 days</span>
-              </div>
-              <div class="mini-bar-chart">
-                <div class="bar active" style="height:40%"></div>
-                <div class="bar" style="height:60%"></div>
-                <div class="bar" style="height:85%"></div>
-                <div class="bar" style="height:45%"></div>
-                <div class="bar" style="height:70%"></div>
-                <div class="bar" style="height:30%"></div>
-                <div class="bar" style="height:55%"></div>
-                <div class="bar" style="height:90%"></div>
-                <div class="bar" style="height:50%"></div>
-                <div class="bar" style="height:35%"></div>
-                <div class="bar" style="height:65%"></div>
-                <div class="bar" style="height:45%"></div>
-              </div>
-              <div class="chart-labels">
-                <div class="chart-label">Mar</div><div class="chart-label">Apr</div>
-                <div class="chart-label">May</div><div class="chart-label">Jun</div>
-                <div class="chart-label">Jul</div><div class="chart-label">Aug</div>
-                <div class="chart-label">Sep</div><div class="chart-label">Oct</div>
-                <div class="chart-label">Nov</div><div class="chart-label">Dec</div>
-                <div class="chart-label">Jan</div><div class="chart-label">Feb</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- WORKERS SNAPSHOT -->
-          <div class="card">
-            <div class="card-header">
-              <div class="card-title">👷 Workers Needing Attention</div>
-              <button class="btn btn-ghost" style="font-size:12px; padding:6px 12px;" onclick="switchPage('workers', document.querySelectorAll('.nav-item')[1])">View All</button>
-            </div>
-            <table>
-              <thead><tr>
-                <th>Worker</th><th>Nationality</th><th>Permit</th><th>Expires</th><th>Status</th>
-              </tr></thead>
-              <tbody>
-                <tr>
-                  <td><div class="worker-name">Mohammad Shahril</div><div class="worker-id">PLKS·A1023847</div></td>
-                  <td><span class="flag">🇮🇩</span></td>
-                  <td><span class="permit-type">PLKS</span></td>
-                  <td><span class="days-left days-red">12 days</span></td>
-                  <td><span class="status-pill status-expiring">Expiring</span></td>
-                </tr>
-                <tr>
-                  <td><div class="worker-name">Ravi Kumar</div><div class="worker-id">EP·B9928134</div></td>
-                  <td><span class="flag">🇮🇳</span></td>
-                  <td><span class="permit-type">EP</span></td>
-                  <td><span class="days-left days-orange">28 days</span></td>
-                  <td><span class="status-pill status-expiring">Expiring</span></td>
-                </tr>
-                <tr>
-                  <td><div class="worker-name">Thida Win</div><div class="worker-id">PLKS·C7712990</div></td>
-                  <td><span class="flag">🇲🇲</span></td>
-                  <td><span class="permit-type">PLKS</span></td>
-                  <td><span class="days-left days-red">5 days</span></td>
-                  <td><span class="status-pill status-expired">Critical</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- RIGHT PANEL -->
-        <div style="display:flex; flex-direction:column; gap:16px;">
-          <!-- QUICK ACTIONS -->
-          <div class="card">
-            <div class="card-header"><div class="card-title">⚡ Quick Actions</div></div>
-            <div style="padding:14px; display:flex; flex-direction:column; gap:8px;">
-              <button class="btn btn-primary" style="justify-content:center; width:100%;" onclick="switchPage('ai', document.querySelectorAll('.nav-item')[2])">🤖 Ask AI Assistant</button>
-              <button class="btn btn-ghost" style="justify-content:center; width:100%; border-color:var(--border);" onclick="openModal()">➕ Add New Worker</button>
-              <button class="btn btn-ghost" style="justify-content:center; width:100%; border-color:var(--border);" onclick="switchPage('documents', document.querySelectorAll('.nav-item')[3])">📤 Upload Document</button>
-              <button class="btn btn-ghost" style="justify-content:center; width:100%; border-color:var(--border);" onclick="showToast('📧 WhatsApp alerts sent to 7 workers')">📲 Send Bulk Reminder</button>
-            </div>
-          </div>
-
-          <!-- RECENT ALERTS -->
-          <div class="card" style="flex:1">
-            <div class="card-header"><div class="card-title">🔔 Recent Alerts</div></div>
-            <div class="alert-list">
-              <div class="alert-item urgent">
-                <div class="alert-icon">🚨</div>
-                <div>
-                  <div class="alert-title">PLKS Critical — Thida Win</div>
-                  <div class="alert-desc">Expires in 5 days. Renewal required immediately.</div>
-                  <div class="alert-time">Today, 8:02 AM</div>
-                </div>
-              </div>
-              <div class="alert-item warn">
-                <div class="alert-icon">⚠️</div>
-                <div>
-                  <div class="alert-title">FOMEMA Due — 3 Workers</div>
-                  <div class="alert-desc">Annual medical exam overdue for Ravi, Ali & Suresh.</div>
-                  <div class="alert-time">Yesterday</div>
-                </div>
-              </div>
-              <div class="alert-item info">
-                <div class="alert-icon">📋</div>
-                <div>
-                  <div class="alert-title">Insurance Renewal Initiated</div>
-                  <div class="alert-desc">FWHS for 8 workers auto-submitted via workflow.</div>
-                  <div class="alert-time">2 days ago</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div class="logo-text">WorkerHub<span style="color:var(--teal)"> MY</span></div>
+        <div class="logo-sub">Powered by Zetrix AI</div>
       </div>
     </div>
 
-    <!-- ── WORKERS ── -->
-    <div class="page" id="page-workers">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">👷 All Foreign Workers</div>
-          <button class="btn btn-ghost" style="font-size:12px; padding:6px 12px;" onclick="showToast('📥 CSV exported successfully')">Export CSV</button>
-          <button class="btn btn-primary" style="font-size:12px;" onclick="openModal()">+ Add Worker</button>
+    <div class="nav-section">
+      <div class="nav-label">Main Menu</div>
+      <div class="nav-item active" onclick="switchPage('dashboard',this)">
+        <span class="nav-icon">⚡</span> Dashboard
+      </div>
+      <div class="nav-item" onclick="switchPage('workers',this)">
+        <span class="nav-icon">👷</span> Workers
+        <span class="badge warn">3</span>
+      </div>
+      <div class="nav-item" onclick="switchPage('ai',this)">
+        <span class="nav-icon">🤖</span> AI Assistant
+      </div>
+      <div class="nav-item" onclick="switchPage('documents',this)">
+        <span class="nav-icon">📂</span> Documents
+      </div>
+      <div class="nav-item" onclick="switchPage('alerts',this)">
+        <span class="nav-icon">🔔</span> Alerts
+        <span class="badge">5</span>
+      </div>
+    </div>
+
+    <div class="nav-section" style="margin-top:20px">
+      <div class="nav-label">System</div>
+      <div class="nav-item" onclick="showToast('⚙️ Settings coming soon in full build')">
+        <span class="nav-icon">⚙️</span> Settings
+      </div>
+      <div class="nav-item" onclick="showToast('📊 Reports module — Q3 roadmap')">
+        <span class="nav-icon">📊</span> Reports
+      </div>
+    </div>
+
+    <div class="sidebar-bottom">
+      <div class="user-card">
+        <div class="avatar">LMH</div>
+        <div>
+          <div class="user-name">Lee Min Ho</div>
+          <div class="user-role">HR Manager · Admin</div>
         </div>
-        <div class="search-filter">
-          <input class="search-input" placeholder="🔍  Search by name, passport, permit number…" oninput="filterWorkers(this.value)"/>
-          <select class="filter-select" onchange="showToast('🔍 Filter applied')">
-            <option>All Nationalities</option>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="page-title" id="topbarTitle">Dashboard</div>
+      <div class="topbar-search">🔍 &nbsp;Search workers, docs…</div>
+      <div class="lang-toggle">
+        <button class="lang-btn active" onclick="toggleLang('EN',this)">EN</button>
+        <button class="lang-btn" onclick="toggleLang('BM',this)">BM</button>
+      </div>
+      <div class="notif-btn" onclick="switchPage('alerts', document.querySelector('[onclick*=alerts]'))">
+        🔔<span class="notif-dot"></span>
+      </div>
+      <button class="btn btn-primary" id="topbarAction" onclick="openModal()">+ Add Worker</button>
+    </header>
+
+    <!-- CONTENT -->
+    <div class="content" id="mainContent">
+
+      <!-- ── DASHBOARD ── -->
+      <div class="page active" id="page-dashboard">
+        <div class="bluesmall-pill">⚡ Connected to Smart WorkerHub</div>
+
+        <div class="stats-row">
+          <div class="stat-card blue" onclick="switchPage('workers', document.querySelectorAll('.nav-item')[1])">
+            <div class="stat-label">Total Workers</div>
+            <div class="stat-val">142</div>
+            <div class="stat-sub">↑ 4 this month</div>
+            <div class="stat-icon">👷</div>
+          </div>
+          <div class="stat-card red" onclick="switchPage('alerts', document.querySelectorAll('.nav-item')[4])">
+            <div class="stat-label">Expiring ≤ 30 Days</div>
+            <div class="stat-val" style="color:var(--red)">7</div>
+            <div class="stat-sub">Action required</div>
+            <div class="stat-icon">⚠️</div>
+          </div>
+          <div class="stat-card orange">
+            <div class="stat-label">Pending FOMEMA</div>
+            <div class="stat-val" style="color:var(--orange)">12</div>
+            <div class="stat-sub">3 overdue</div>
+            <div class="stat-icon">🏥</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-label">Compliant Workers</div>
+            <div class="stat-val" style="color:#1a8a4a">123</div>
+            <div class="stat-sub">86.6% compliance</div>
+            <div class="stat-icon">✅</div>
+          </div>
+        </div>
+
+        <div class="dash-grid">
+          <div class="dash-left">
+            <!-- PERMIT EXPIRY CHART -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">📅 Permit Expiry — Next 6 Months</div>
+                <button class="btn btn-ghost" style="font-size:12px; padding:6px 12px;"
+                  onclick="showToast('📊 Full report exported')">Export</button>
+              </div>
+              <div class="chart-container">
+                <div style="padding:16px 0 4px; display:flex; align-items:baseline; gap:8px;">
+                  <span style="font-family:Syne; font-size:22px; font-weight:800;">31</span>
+                  <span style="font-size:13px; color:var(--muted)">permits expiring in next 180 days</span>
+                </div>
+                <div class="mini-bar-chart">
+                  <div class="bar active" style="height:40%"></div>
+                  <div class="bar" style="height:60%"></div>
+                  <div class="bar" style="height:85%"></div>
+                  <div class="bar" style="height:45%"></div>
+                  <div class="bar" style="height:70%"></div>
+                  <div class="bar" style="height:30%"></div>
+                  <div class="bar" style="height:55%"></div>
+                  <div class="bar" style="height:90%"></div>
+                  <div class="bar" style="height:50%"></div>
+                  <div class="bar" style="height:35%"></div>
+                  <div class="bar" style="height:65%"></div>
+                  <div class="bar" style="height:45%"></div>
+                </div>
+                <div class="chart-labels">
+                  <div class="chart-label">Mar</div>
+                  <div class="chart-label">Apr</div>
+                  <div class="chart-label">May</div>
+                  <div class="chart-label">Jun</div>
+                  <div class="chart-label">Jul</div>
+                  <div class="chart-label">Aug</div>
+                  <div class="chart-label">Sep</div>
+                  <div class="chart-label">Oct</div>
+                  <div class="chart-label">Nov</div>
+                  <div class="chart-label">Dec</div>
+                  <div class="chart-label">Jan</div>
+                  <div class="chart-label">Feb</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- WORKERS SNAPSHOT -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">👷 Workers Needing Attention</div>
+                <button class="btn btn-ghost" style="font-size:12px; padding:6px 12px;"
+                  onclick="switchPage('workers', document.querySelectorAll('.nav-item')[1])">View All</button>
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Worker</th>
+                    <th>Nationality</th>
+                    <th>Permit</th>
+                    <th>Expires</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="worker-name">Mohammad Shahril</div>
+                      <div class="worker-id">PLKS·A1023847</div>
+                    </td>
+                    <td><span class="flag">🇮🇩</span></td>
+                    <td><span class="permit-type">PLKS</span></td>
+                    <td><span class="days-left days-red">12 days</span></td>
+                    <td><span class="status-pill status-expiring">Expiring</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="worker-name">Ravi Kumar</div>
+                      <div class="worker-id">EP·B9928134</div>
+                    </td>
+                    <td><span class="flag">🇮🇳</span></td>
+                    <td><span class="permit-type">EP</span></td>
+                    <td><span class="days-left days-orange">28 days</span></td>
+                    <td><span class="status-pill status-expiring">Expiring</span></td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="worker-name">Thida Win</div>
+                      <div class="worker-id">PLKS·C7712990</div>
+                    </td>
+                    <td><span class="flag">🇲🇲</span></td>
+                    <td><span class="permit-type">PLKS</span></td>
+                    <td><span class="days-left days-red">5 days</span></td>
+                    <td><span class="status-pill status-expired">Critical</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- RIGHT PANEL -->
+          <div style="display:flex; flex-direction:column; gap:16px;">
+            <!-- QUICK ACTIONS -->
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title">⚡ Quick Actions</div>
+              </div>
+              <div style="padding:14px; display:flex; flex-direction:column; gap:8px;">
+                <button class="btn btn-primary" style="justify-content:center; width:100%;"
+                  onclick="switchPage('ai', document.querySelectorAll('.nav-item')[2])">🤖 Ask AI Assistant</button>
+                <button class="btn btn-ghost" style="justify-content:center; width:100%; border-color:var(--border);"
+                  onclick="openModal()">➕ Add New Worker</button>
+                <button class="btn btn-ghost" style="justify-content:center; width:100%; border-color:var(--border);"
+                  onclick="switchPage('documents', document.querySelectorAll('.nav-item')[3])">📤 Upload
+                  Document</button>
+                <button class="btn btn-ghost" style="justify-content:center; width:100%; border-color:var(--border);"
+                  onclick="showToast('📧 WhatsApp alerts sent to 7 workers')">📲 Send Bulk Reminder</button>
+              </div>
+            </div>
+
+            <!-- RECENT ALERTS -->
+            <div class="card" style="flex:1">
+              <div class="card-header">
+                <div class="card-title">🔔 Recent Alerts</div>
+              </div>
+              <div class="alert-list">
+                <div class="alert-item urgent">
+                  <div class="alert-icon">🚨</div>
+                  <div>
+                    <div class="alert-title">PLKS Critical — Thida Win</div>
+                    <div class="alert-desc">Expires in 5 days. Renewal required immediately.</div>
+                    <div class="alert-time">Today, 8:02 AM</div>
+                  </div>
+                </div>
+                <div class="alert-item warn">
+                  <div class="alert-icon">⚠️</div>
+                  <div>
+                    <div class="alert-title">FOMEMA Due — 3 Workers</div>
+                    <div class="alert-desc">Annual medical exam overdue for Ravi, Ali & Suresh.</div>
+                    <div class="alert-time">Yesterday</div>
+                  </div>
+                </div>
+                <div class="alert-item info">
+                  <div class="alert-icon">📋</div>
+                  <div>
+                    <div class="alert-title">Insurance Renewal Initiated</div>
+                    <div class="alert-desc">FWHS for 8 workers auto-submitted via workflow.</div>
+                    <div class="alert-time">2 days ago</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── WORKERS ── -->
+      <div class="page" id="page-workers">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">👷 All Foreign Workers</div>
+            <button class="btn btn-ghost" style="font-size:12px; padding:6px 12px;"
+              onclick="showToast('📥 CSV exported successfully')">Export CSV</button>
+            <button class="btn btn-primary" style="font-size:12px;" onclick="openModal()">+ Add Worker</button>
+          </div>
+          <div class="search-filter">
+            <input class="search-input" placeholder="🔍  Search by name, passport, permit number…"
+              oninput="filterWorkers(this.value)" />
+            <select class="filter-select" onchange="showToast('🔍 Filter applied')">
+              <option>All Nationalities</option>
+              <option>🇮🇩 Indonesia</option>
+              <option>🇧🇩 Bangladesh</option>
+              <option>🇲🇲 Myanmar</option>
+              <option>🇮🇳 India</option>
+              <option>🇳🇵 Nepal</option>
+            </select>
+            <select class="filter-select" onchange="showToast('🔍 Filter applied')">
+              <option>All Permit Types</option>
+              <option>PLKS</option>
+              <option>EP</option>
+              <option>RP</option>
+            </select>
+            <select class="filter-select" onchange="showToast('🔍 Filter applied')">
+              <option>All Status</option>
+              <option>Active</option>
+              <option>Expiring Soon</option>
+              <option>Expired</option>
+            </select>
+          </div>
+          <table id="workersTable">
+            <thead>
+              <tr>
+                <th>Worker</th>
+                <th>Nationality</th>
+                <th>Passport No.</th>
+                <th>Permit Type</th>
+                <th>Expiry Date</th>
+                <th>Days Left</th>
+                <th>Insurance</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="workersBody">
+              <tr>
+                <td>
+                  <div class="worker-name">Mohammad Shahril bin Idris</div>
+                  <div class="worker-id">ID: W-1023847</div>
+                </td>
+                <td><span class="flag">🇮🇩</span></td>
+                <td style="font-family:monospace; font-size:12px;">A9182736K</td>
+                <td><span class="permit-type">PLKS</span></td>
+                <td>16 Mar 2025</td>
+                <td><span class="days-left days-red">12</span></td>
+                <td><span class="status-pill status-active">Active</span></td>
+                <td><span class="status-pill status-expiring">Expiring</span></td>
+                <td><button class="action-btn" onclick="showWorker('Mohammad Shahril')">👁️</button> <button
+                    class="action-btn" onclick="showToast('✏️ Edit mode for Mohammad Shahril')">✏️</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="worker-name">Ravi Kumar s/o Subramaniam</div>
+                  <div class="worker-id">ID: W-9928134</div>
+                </td>
+                <td><span class="flag">🇮🇳</span></td>
+                <td style="font-family:monospace; font-size:12px;">P7634521N</td>
+                <td><span class="permit-type">EP</span></td>
+                <td>01 Apr 2025</td>
+                <td><span class="days-left days-orange">28</span></td>
+                <td><span class="status-pill status-active">Active</span></td>
+                <td><span class="status-pill status-expiring">Expiring</span></td>
+                <td><button class="action-btn" onclick="showWorker('Ravi Kumar')">👁️</button> <button
+                    class="action-btn" onclick="showToast('✏️ Edit mode for Ravi Kumar')">✏️</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="worker-name">Thida Win</div>
+                  <div class="worker-id">ID: W-7712990</div>
+                </td>
+                <td><span class="flag">🇲🇲</span></td>
+                <td style="font-family:monospace; font-size:12px;">MA8812044</td>
+                <td><span class="permit-type">PLKS</span></td>
+                <td>09 Mar 2025</td>
+                <td><span class="days-left days-red">5</span></td>
+                <td><span class="status-pill status-expired">Expired</span></td>
+                <td><span class="status-pill status-expired">Critical</span></td>
+                <td><button class="action-btn" onclick="showWorker('Thida Win')">👁️</button> <button class="action-btn"
+                    onclick="showToast('✏️ Edit mode for Thida Win')">✏️</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="worker-name">Mohammad Alam</div>
+                  <div class="worker-id">ID: W-3310028</div>
+                </td>
+                <td><span class="flag">🇧🇩</span></td>
+                <td style="font-family:monospace; font-size:12px;">BD9012345</td>
+                <td><span class="permit-type">PLKS</span></td>
+                <td>12 Sep 2025</td>
+                <td><span class="days-left days-green">192</span></td>
+                <td><span class="status-pill status-active">Active</span></td>
+                <td><span class="status-pill status-active">Active</span></td>
+                <td><button class="action-btn" onclick="showWorker('Mohammad Alam')">👁️</button> <button
+                    class="action-btn" onclick="showToast('✏️ Edit mode for Mohammad Alam')">✏️</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="worker-name">Suresh Bahadur Thapa</div>
+                  <div class="worker-id">ID: W-5541209</div>
+                </td>
+                <td><span class="flag">🇳🇵</span></td>
+                <td style="font-family:monospace; font-size:12px;">NP7823610</td>
+                <td><span class="permit-type">RP</span></td>
+                <td>30 Nov 2025</td>
+                <td><span class="days-left days-green">271</span></td>
+                <td><span class="status-pill status-active">Active</span></td>
+                <td><span class="status-pill status-active">Active</span></td>
+                <td><button class="action-btn" onclick="showWorker('Suresh Bahadur')">👁️</button> <button
+                    class="action-btn" onclick="showToast('✏️ Edit mode for Suresh Bahadur')">✏️</button></td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="worker-name">Soe Myat Thu</div>
+                  <div class="worker-id">ID: W-6628471</div>
+                </td>
+                <td><span class="flag">🇲🇲</span></td>
+                <td style="font-family:monospace; font-size:12px;">MM4490123</td>
+                <td><span class="permit-type">PLKS</span></td>
+                <td>22 Jul 2025</td>
+                <td><span class="days-left days-green">140</span></td>
+                <td><span class="status-pill status-active">Active</span></td>
+                <td><span class="status-pill status-active">Active</span></td>
+                <td><button class="action-btn" onclick="showWorker('Soe Myat Thu')">👁️</button> <button
+                    class="action-btn" onclick="showToast('✏️ Edit mode')">✏️</button></td>
+              </tr>
+            </tbody>
+          </table>
+          <div
+            style="padding:14px 20px; border-top:1px solid var(--border); display:flex; align-items:center; gap:12px; font-size:13px; color:var(--muted);">
+            Showing 6 of 142 workers &nbsp;·&nbsp;
+            <button class="btn btn-ghost" style="padding:5px 12px; font-size:12px;">← Prev</button>
+            <button class="btn btn-ghost" style="padding:5px 12px; font-size:12px;">Next →</button>
+            <span style="margin-left:auto;">Page 1 of 24</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── AI ASSISTANT ── -->
+      <div class="page no-pad" id="page-ai" style="display:none; height:calc(100vh - 60px);">
+        <div class="chat-wrap">
+          <!-- Chat Sidebar -->
+          <div class="chat-sidebar">
+            <div class="chat-sidebar-header">
+              <div class="chat-sidebar-title">🤖 AI Compliance Hub</div>
+              <div class="chat-sidebar-sub">Powered by Smart AI Agent </div>
+            </div>
+            <div class="quick-prompts">
+              <div class="qp-label">Suggested Questions</div>
+              <button class="qp-btn"
+                onclick="askQuestion('What are the FOMEMA requirements for Indonesian workers in their 3rd year?')">🏥
+                FOMEMA requirements for Year 3?</button>
+              <button class="qp-btn"
+                onclick="askQuestion('How do I renew a PLKS permit? What documents are needed?')">📋 How to renew PLKS
+                permit?</button>
+              <button class="qp-btn"
+                onclick="askQuestion('What is the FWHS insurance and who needs to be covered?')">🛡️ Explain FWHS
+                insurance coverage</button>
+              <button class="qp-btn"
+                onclick="askQuestion('What are the penalties under Employment Act 1955 for non-compliance?')">⚖️
+                Employment Act penalties?</button>
+              <button class="qp-btn"
+                onclick="askQuestion('Which workers have permits expiring in the next 30 days?')">📅 Permits expiring in
+                30 days?</button>
+              <button class="qp-btn"
+                onclick="askQuestion('Generate a compliance checklist for a new Indonesian worker')">✅ New worker
+                compliance checklist</button>
+
+              <div class="qp-label" style="margin-top:16px;">Document Actions</div>
+              <button class="qp-btn" onclick="triggerUploadPrompt()">📤 Upload passport for OCR extraction</button>
+              <button class="qp-btn"
+                onclick="askQuestion('Scan and save the insurance document for worker Ali Hassan')">💾 Save insurance
+                document</button>
+            </div>
+            <div class="chat-context">
+              <div class="qp-label">Active Context</div>
+              <span class="context-tag">📚 Jabatan Imigresen Policy v2024</span><br><br>
+              <span class="context-tag">⚖️ Employment Act 1955</span><br><br>
+              <span class="context-tag">🏥 FOMEMA Guidelines 2024</span>
+            </div>
+          </div>
+
+          <!-- Chat Main -->
+          <div class="chat-main">
+            <div class="chat-header">
+              <div class="ai-avatar">🤖</div>
+              <div>
+                <div class="ai-name">Compliance AI Assistant</div>
+                <div class="ai-status">Online — Smart Agent Active</div>
+              </div>
+              <div class="powered-badge">⚡ NAME</div>
+            </div>
+
+            <div class="messages" id="chatMessages">
+              <!-- Welcome message -->
+              <div class="msg bot">
+                <div class="msg-avatar">🤖</div>
+                <div class="msg-meta">
+                  <div class="msg-bubble">
+                    Selamat datang! 👋 I'm your <strong>HR Compliance AI</strong>, connected to the latest Jabatan
+                    Imigresen Malaysia policies, Employment Act 1955, and FOMEMA guidelines.<br><br>
+                    I can help you with permit renewals, FOMEMA requirements, insurance compliance, and document
+                    processing. What do you need today?
+                    <div>
+                      <span class="source-chip">📚 Jabatan Imigresen DB</span>
+                      <span class="source-chip">⚖️ Employment Act 1955</span>
+                    </div>
+                  </div>
+                  <div class="msg-time">Just now</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="chat-input-area">
+              <div class="upload-preview" id="uploadPreview">
+                <span>📎</span>
+                <span class="upload-preview-name" id="uploadName">passport_scan.jpg</span>
+                <span class="remove-upload" onclick="removeUpload()">✕</span>
+              </div>
+              <div class="chat-input-row">
+                <input type="file" id="fileInput" accept="image/*,.pdf" style="display:none"
+                  onchange="handleFileUpload(this)" />
+                <button class="attach-btn" onclick="document.getElementById('fileInput').click()">📎</button>
+                <textarea class="chat-input" id="chatInput" rows="1"
+                  placeholder="Ask about PLKS, FOMEMA, Employment Act… or upload a document"
+                  onkeydown="handleEnter(event)"></textarea>
+                <button class="send-btn" onclick="sendMessage()">➤</button>
+              </div>
+              <div class="hint-text">Zetrix AI — Responses based on official Malaysian immigration & labour policies
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── DOCUMENTS ── -->
+      <div class="page" id="page-documents">
+        <div class="upload-zone" id="uploadZone" ondragover="event.preventDefault(); this.classList.add('dragging')"
+          ondragleave="this.classList.remove('dragging')" ondrop="handleDrop(event)"
+          onclick="document.getElementById('docFileInput').click()">
+          <input type="file" id="docFileInput" style="display:none" multiple onchange="handleDocUpload(this)" />
+          <div class="upload-zone-icon">📤</div>
+          <div class="upload-zone-title">Drag & Drop Documents Here</div>
+          <div class="upload-zone-sub">Supports passports, permits, FOMEMA results, insurance docs · PDF, JPG, PNG<br>AI
+            will auto-extract and tag worker data via OCR Workflow</div>
+        </div>
+
+        <div class="card" style="margin: 0 0 20px;">
+          <div class="card-header">
+            <div class="card-title">📂 Document Library</div>
+            <select class="filter-select" style="font-size:12px;" onchange="showToast('🔍 Category filter applied')">
+              <option>All Categories</option>
+              <option>Passports</option>
+              <option>Permits (PLKS/EP)</option>
+              <option>FOMEMA Results</option>
+              <option>Insurance (FWHS/IG)</option>
+              <option>Work Contracts</option>
+            </select>
+          </div>
+          <div class="doc-grid" id="docGrid">
+            <div class="doc-card" onclick="showToast('📄 Opening: Thida Win — Passport')">
+              <div class="doc-thumb img">🛂</div>
+              <div class="doc-info">
+                <div class="doc-name">Passport — Thida Win</div>
+                <div class="doc-meta">Uploaded 2 Feb 2025 · 1.2 MB</div>
+                <span class="doc-tag">PASSPORT</span>
+              </div>
+            </div>
+            <div class="doc-card" onclick="showToast('📄 Opening: Mohammad Shahril — PLKS')">
+              <div class="doc-thumb pdf">📋</div>
+              <div class="doc-info">
+                <div class="doc-name">PLKS — Mohammad Shahril</div>
+                <div class="doc-meta">Uploaded 12 Jan 2025 · 876 KB</div>
+                <span class="doc-tag">PERMIT</span>
+              </div>
+            </div>
+            <div class="doc-card" onclick="showToast('📄 Opening: FOMEMA Results Batch')">
+              <div class="doc-thumb pdf">🏥</div>
+              <div class="doc-info">
+                <div class="doc-name">FOMEMA Results — Batch Mar25</div>
+                <div class="doc-meta">Uploaded 1 Mar 2025 · 3.4 MB</div>
+                <span class="doc-tag">FOMEMA</span>
+              </div>
+            </div>
+            <div class="doc-card" onclick="showToast('📄 Opening: FWHS Insurance Certificate')">
+              <div class="doc-thumb word">🛡️</div>
+              <div class="doc-info">
+                <div class="doc-name">FWHS Certificate — Ravi Kumar</div>
+                <div class="doc-meta">Uploaded 5 Mar 2025 · 540 KB</div>
+                <span class="doc-tag">INSURANCE</span>
+              </div>
+            </div>
+            <div class="doc-card" onclick="showToast('📄 Opening: Contract — Soe Myat Thu')">
+              <div class="doc-thumb word">📝</div>
+              <div class="doc-info">
+                <div class="doc-name">Contract — Soe Myat Thu</div>
+                <div class="doc-meta">Uploaded 14 Dec 2024 · 120 KB</div>
+                <span class="doc-tag">CONTRACT</span>
+              </div>
+            </div>
+            <div class="doc-card" onclick="showToast('📄 Opening: EP Renewal — Mohammad Alam')">
+              <div class="doc-thumb pdf">📋</div>
+              <div class="doc-info">
+                <div class="doc-name">EP Renewal — Mohammad Alam</div>
+                <div class="doc-meta">Uploaded 8 Feb 2025 · 1.8 MB</div>
+                <span class="doc-tag">PERMIT</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ALERTS ── -->
+      <div class="page" id="page-alerts">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">🔔 Alerts & Notifications</div>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <span style="font-size:12px; color:var(--muted)">Auto-generated by Scheduled Workflow</span>
+              <button class="btn btn-ghost" style="font-size:12px; padding:6px 12px;" onclick="markAllRead()">✓ Mark All
+                Read</button>
+            </div>
+          </div>
+
+          <div
+            style="display:flex; gap:8px; padding:14px 16px; border-bottom:1px solid var(--border); background:#fafcff;">
+            <button class="btn btn-ghost" style="font-size:12px; padding:6px 14px;"
+              onclick="showToast('🔴 Showing urgent alerts')">🚨 Urgent (2)</button>
+            <button class="btn btn-ghost" style="font-size:12px; padding:6px 14px;"
+              onclick="showToast('⚠️ Showing warnings')">⚠️ Warning (3)</button>
+            <button class="btn btn-ghost" style="font-size:12px; padding:6px 14px;"
+              onclick="showToast('ℹ️ Showing info alerts')">ℹ️ Info (5)</button>
+            <button class="btn btn-ghost" style="font-size:12px; padding:6px 14px;"
+              onclick="showToast('✅ Showing resolved')">✅ Resolved (12)</button>
+          </div>
+
+          <div class="alert-page-list">
+            <div class="big-alert urgent">
+              <div class="ba-icon">🚨</div>
+              <div class="ba-content">
+                <div class="ba-title">PLKS Permit Expiring in 5 Days — Thida Win</div>
+                <div class="ba-desc">Permit No. PLKS-C7712990 expires on 9 Mar 2025. Immediate renewal required to avoid
+                  legal non-compliance under Immigration Act 1959/63. Fine up to RM10,000 per worker applies.</div>
+                <div class="ba-meta">
+                  <span class="ba-tag">🇲🇲 Myanmar</span>
+                  <span class="ba-tag">PLKS</span>
+                  <span class="ba-tag">Permit Renewal</span>
+                  <span class="ba-time">Today, 8:00 AM (Auto)</span>
+                </div>
+              </div>
+              <div class="ba-actions">
+                <button class="btn btn-primary" style="font-size:12px; padding:7px 14px; white-space:nowrap;"
+                  onclick="showToast('🚀 Renewal workflow initiated for Thida Win')">Start Renewal</button>
+                <button class="btn btn-ghost" style="font-size:12px; padding:7px 14px;"
+                  onclick="showToast('📲 WhatsApp reminder sent')">Remind</button>
+              </div>
+            </div>
+
+            <div class="big-alert urgent">
+              <div class="ba-icon">🚨</div>
+              <div class="ba-content">
+                <div class="ba-title">PLKS Expiring in 12 Days — Mohammad Shahril</div>
+                <div class="ba-desc">Permit expires 16 Mar 2025. All renewal documents (Form IMM.12, passport copy,
+                  FOMEMA clearance) must be submitted to JTK Selangor before expiry.</div>
+                <div class="ba-meta">
+                  <span class="ba-tag">🇮🇩 Indonesia</span>
+                  <span class="ba-tag">PLKS</span>
+                  <span class="ba-tag">JTK Submission</span>
+                  <span class="ba-time">Today, 8:00 AM (Auto)</span>
+                </div>
+              </div>
+              <div class="ba-actions">
+                <button class="btn btn-primary" style="font-size:12px; padding:7px 14px; white-space:nowrap;"
+                  onclick="showToast('🚀 Renewal workflow initiated')">Start Renewal</button>
+                <button class="btn btn-ghost" style="font-size:12px; padding:7px 14px;"
+                  onclick="showToast('📲 Reminder sent')">Remind</button>
+              </div>
+            </div>
+
+            <div class="big-alert warn">
+              <div class="ba-icon">⚠️</div>
+              <div class="ba-content">
+                <div class="ba-title">FOMEMA Medical Exam Overdue — 3 Workers</div>
+                <div class="ba-desc">Annual medical checkup under FOMEMA is overdue for Ravi Kumar, Mohammad Alam, and
+                  Ali Hassan. Appointment booking is required. Workers cannot renew permits without valid FOMEMA
+                  clearance letter.</div>
+                <div class="ba-meta">
+                  <span class="ba-tag">FOMEMA</span>
+                  <span class="ba-tag">Medical</span>
+                  <span class="ba-time">Yesterday, 8:00 AM (Auto)</span>
+                </div>
+              </div>
+              <div class="ba-actions">
+                <button class="btn btn-primary" style="font-size:12px; padding:7px 14px; white-space:nowrap;"
+                  onclick="showToast('📅 FOMEMA appointments booked')">Book Appointment</button>
+              </div>
+            </div>
+
+            <div class="big-alert warn">
+              <div class="ba-icon">🛡️</div>
+              <div class="ba-content">
+                <div class="ba-title">FWHS Insurance — 8 Workers Due for Renewal</div>
+                <div class="ba-desc">Foreign Workers Hospitalisation and Surgical Insurance Scheme (FWHS) renewal is due
+                  for 8 workers within 45 days. Minimum coverage: RM10,000. Employer responsibility under Employment Act
+                  Section 60K.</div>
+                <div class="ba-meta">
+                  <span class="ba-tag">FWHS</span>
+                  <span class="ba-tag">Insurance</span>
+                  <span class="ba-time">2 days ago (Auto)</span>
+                </div>
+              </div>
+              <div class="ba-actions">
+                <button class="btn btn-primary" style="font-size:12px; padding:7px 14px; white-space:nowrap;"
+                  onclick="showToast('🛡️ FWHS renewal workflow started')">Renew Now</button>
+              </div>
+            </div>
+
+            <div class="big-alert info">
+              <div class="ba-icon">✅</div>
+              <div class="ba-content">
+                <div class="ba-title">EP Permit Renewed Successfully — Ravi Kumar</div>
+                <div class="ba-desc">Employment Pass renewed. New expiry: 1 Apr 2026. Documents updated in system.
+                  WhatsApp confirmation sent to worker and employer contact.</div>
+                <div class="ba-meta">
+                  <span class="ba-tag">🇮🇳 India</span>
+                  <span class="ba-tag">EP</span>
+                  <span class="ba-tag">Completed</span>
+                  <span class="ba-time">3 days ago</span>
+                </div>
+              </div>
+              <div class="ba-actions">
+                <button class="btn btn-ghost" style="font-size:12px; padding:7px 14px; white-space:nowrap;"
+                  onclick="showToast('📄 Viewing permit document')">View Doc</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- end content -->
+  </div><!-- end main -->
+
+  <!-- ADD WORKER MODAL -->
+  <div class="modal-overlay" id="modalOverlay" onclick="closeModalOut(event)">
+    <div class="modal">
+      <div class="modal-title">➕ Add New Foreign Worker</div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input class="form-input" placeholder="e.g. Ahmad bin Rashid" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Nationality</label>
+          <select class="form-input">
             <option>🇮🇩 Indonesia</option>
             <option>🇧🇩 Bangladesh</option>
             <option>🇲🇲 Myanmar</option>
             <option>🇮🇳 India</option>
             <option>🇳🇵 Nepal</option>
-          </select>
-          <select class="filter-select" onchange="showToast('🔍 Filter applied')">
-            <option>All Permit Types</option>
-            <option>PLKS</option>
-            <option>EP</option>
-            <option>RP</option>
-          </select>
-          <select class="filter-select" onchange="showToast('🔍 Filter applied')">
-            <option>All Status</option>
-            <option>Active</option>
-            <option>Expiring Soon</option>
-            <option>Expired</option>
+            <option>🇵🇭 Philippines</option>
+            <option>🇵🇰 Pakistan</option>
           </select>
         </div>
-        <table id="workersTable">
-          <thead><tr>
-            <th>Worker</th><th>Nationality</th><th>Passport No.</th>
-            <th>Permit Type</th><th>Expiry Date</th><th>Days Left</th>
-            <th>Insurance</th><th>Status</th><th>Actions</th>
-          </tr></thead>
-          <tbody id="workersBody">
-            <tr>
-              <td><div class="worker-name">Mohammad Shahril bin Idris</div><div class="worker-id">ID: W-1023847</div></td>
-              <td><span class="flag">🇮🇩</span></td>
-              <td style="font-family:monospace; font-size:12px;">A9182736K</td>
-              <td><span class="permit-type">PLKS</span></td>
-              <td>16 Mar 2025</td>
-              <td><span class="days-left days-red">12</span></td>
-              <td><span class="status-pill status-active">Active</span></td>
-              <td><span class="status-pill status-expiring">Expiring</span></td>
-              <td><button class="action-btn" onclick="showWorker('Mohammad Shahril')">👁️</button> <button class="action-btn" onclick="showToast('✏️ Edit mode for Mohammad Shahril')">✏️</button></td>
-            </tr>
-            <tr>
-              <td><div class="worker-name">Ravi Kumar s/o Subramaniam</div><div class="worker-id">ID: W-9928134</div></td>
-              <td><span class="flag">🇮🇳</span></td>
-              <td style="font-family:monospace; font-size:12px;">P7634521N</td>
-              <td><span class="permit-type">EP</span></td>
-              <td>01 Apr 2025</td>
-              <td><span class="days-left days-orange">28</span></td>
-              <td><span class="status-pill status-active">Active</span></td>
-              <td><span class="status-pill status-expiring">Expiring</span></td>
-              <td><button class="action-btn" onclick="showWorker('Ravi Kumar')">👁️</button> <button class="action-btn" onclick="showToast('✏️ Edit mode for Ravi Kumar')">✏️</button></td>
-            </tr>
-            <tr>
-              <td><div class="worker-name">Thida Win</div><div class="worker-id">ID: W-7712990</div></td>
-              <td><span class="flag">🇲🇲</span></td>
-              <td style="font-family:monospace; font-size:12px;">MA8812044</td>
-              <td><span class="permit-type">PLKS</span></td>
-              <td>09 Mar 2025</td>
-              <td><span class="days-left days-red">5</span></td>
-              <td><span class="status-pill status-expired">Expired</span></td>
-              <td><span class="status-pill status-expired">Critical</span></td>
-              <td><button class="action-btn" onclick="showWorker('Thida Win')">👁️</button> <button class="action-btn" onclick="showToast('✏️ Edit mode for Thida Win')">✏️</button></td>
-            </tr>
-            <tr>
-              <td><div class="worker-name">Mohammad Alam</div><div class="worker-id">ID: W-3310028</div></td>
-              <td><span class="flag">🇧🇩</span></td>
-              <td style="font-family:monospace; font-size:12px;">BD9012345</td>
-              <td><span class="permit-type">PLKS</span></td>
-              <td>12 Sep 2025</td>
-              <td><span class="days-left days-green">192</span></td>
-              <td><span class="status-pill status-active">Active</span></td>
-              <td><span class="status-pill status-active">Active</span></td>
-              <td><button class="action-btn" onclick="showWorker('Mohammad Alam')">👁️</button> <button class="action-btn" onclick="showToast('✏️ Edit mode for Mohammad Alam')">✏️</button></td>
-            </tr>
-            <tr>
-              <td><div class="worker-name">Suresh Bahadur Thapa</div><div class="worker-id">ID: W-5541209</div></td>
-              <td><span class="flag">🇳🇵</span></td>
-              <td style="font-family:monospace; font-size:12px;">NP7823610</td>
-              <td><span class="permit-type">RP</span></td>
-              <td>30 Nov 2025</td>
-              <td><span class="days-left days-green">271</span></td>
-              <td><span class="status-pill status-active">Active</span></td>
-              <td><span class="status-pill status-active">Active</span></td>
-              <td><button class="action-btn" onclick="showWorker('Suresh Bahadur')">👁️</button> <button class="action-btn" onclick="showToast('✏️ Edit mode for Suresh Bahadur')">✏️</button></td>
-            </tr>
-            <tr>
-              <td><div class="worker-name">Soe Myat Thu</div><div class="worker-id">ID: W-6628471</div></td>
-              <td><span class="flag">🇲🇲</span></td>
-              <td style="font-family:monospace; font-size:12px;">MM4490123</td>
-              <td><span class="permit-type">PLKS</span></td>
-              <td>22 Jul 2025</td>
-              <td><span class="days-left days-green">140</span></td>
-              <td><span class="status-pill status-active">Active</span></td>
-              <td><span class="status-pill status-active">Active</span></td>
-              <td><button class="action-btn" onclick="showWorker('Soe Myat Thu')">👁️</button> <button class="action-btn" onclick="showToast('✏️ Edit mode')">✏️</button></td>
-            </tr>
-          </tbody>
-        </table>
-        <div style="padding:14px 20px; border-top:1px solid var(--border); display:flex; align-items:center; gap:12px; font-size:13px; color:var(--muted);">
-          Showing 6 of 142 workers &nbsp;·&nbsp;
-          <button class="btn btn-ghost" style="padding:5px 12px; font-size:12px;">← Prev</button>
-          <button class="btn btn-ghost" style="padding:5px 12px; font-size:12px;">Next →</button>
-          <span style="margin-left:auto;">Page 1 of 24</span>
-        </div>
       </div>
-    </div>
-
-    <!-- ── AI ASSISTANT ── -->
-    <div class="page no-pad" id="page-ai" style="display:none; height:calc(100vh - 60px);">
-      <div class="chat-wrap">
-        <!-- Chat Sidebar -->
-        <div class="chat-sidebar">
-          <div class="chat-sidebar-header">
-            <div class="chat-sidebar-title">🤖 AI Compliance Hub</div>
-            <div class="chat-sidebar-sub">Powered by Smart AI Agent </div>
-          </div>
-          <div class="quick-prompts">
-            <div class="qp-label">Suggested Questions</div>
-            <button class="qp-btn" onclick="askQuestion('What are the FOMEMA requirements for Indonesian workers in their 3rd year?')">🏥 FOMEMA requirements for Year 3?</button>
-            <button class="qp-btn" onclick="askQuestion('How do I renew a PLKS permit? What documents are needed?')">📋 How to renew PLKS permit?</button>
-            <button class="qp-btn" onclick="askQuestion('What is the FWHS insurance and who needs to be covered?')">🛡️ Explain FWHS insurance coverage</button>
-            <button class="qp-btn" onclick="askQuestion('What are the penalties under Employment Act 1955 for non-compliance?')">⚖️ Employment Act penalties?</button>
-            <button class="qp-btn" onclick="askQuestion('Which workers have permits expiring in the next 30 days?')">📅 Permits expiring in 30 days?</button>
-            <button class="qp-btn" onclick="askQuestion('Generate a compliance checklist for a new Indonesian worker')">✅ New worker compliance checklist</button>
-
-            <div class="qp-label" style="margin-top:16px;">Document Actions</div>
-            <button class="qp-btn" onclick="triggerUploadPrompt()">📤 Upload passport for OCR extraction</button>
-            <button class="qp-btn" onclick="askQuestion('Scan and save the insurance document for worker Ali Hassan')">💾 Save insurance document</button>
-          </div>
-          <div class="chat-context">
-            <div class="qp-label">Active Context</div>
-            <span class="context-tag">📚 Jabatan Imigresen Policy v2024</span><br><br>
-            <span class="context-tag">⚖️ Employment Act 1955</span><br><br>
-            <span class="context-tag">🏥 FOMEMA Guidelines 2024</span>
-          </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Passport No.</label>
+          <input class="form-input" placeholder="e.g. A9182736K" />
         </div>
-
-        <!-- Chat Main -->
-        <div class="chat-main">
-          <div class="chat-header">
-            <div class="ai-avatar">🤖</div>
-            <div>
-              <div class="ai-name">Compliance AI Assistant</div>
-              <div class="ai-status">Online — Smart Agent Active</div>
-            </div>
-            <div class="powered-badge">⚡ NAME</div>
-          </div>
-
-          <div class="messages" id="chatMessages">
-            <!-- Welcome message -->
-            <div class="msg bot">
-              <div class="msg-avatar">🤖</div>
-              <div class="msg-meta">
-                <div class="msg-bubble">
-                  Selamat datang! 👋 I'm your <strong>HR Compliance AI</strong>, connected to the latest Jabatan Imigresen Malaysia policies, Employment Act 1955, and FOMEMA guidelines.<br><br>
-                  I can help you with permit renewals, FOMEMA requirements, insurance compliance, and document processing. What do you need today?
-                  <div>
-                    <span class="source-chip">📚 Jabatan Imigresen DB</span>
-                    <span class="source-chip">⚖️ Employment Act 1955</span>
-                  </div>
-                </div>
-                <div class="msg-time">Just now</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="chat-input-area">
-            <div class="upload-preview" id="uploadPreview">
-              <span>📎</span>
-              <span class="upload-preview-name" id="uploadName">passport_scan.jpg</span>
-              <span class="remove-upload" onclick="removeUpload()">✕</span>
-            </div>
-            <div class="chat-input-row">
-              <input type="file" id="fileInput" accept="image/*,.pdf" style="display:none" onchange="handleFileUpload(this)"/>
-              <button class="attach-btn" onclick="document.getElementById('fileInput').click()">📎</button>
-              <textarea class="chat-input" id="chatInput" rows="1" placeholder="Ask about PLKS, FOMEMA, Employment Act… or upload a document" onkeydown="handleEnter(event)"></textarea>
-              <button class="send-btn" onclick="sendMessage()">➤</button>
-            </div>
-            <div class="hint-text">Zetrix AI — Responses based on official Malaysian immigration & labour policies</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── DOCUMENTS ── -->
-    <div class="page" id="page-documents">
-      <div class="upload-zone" id="uploadZone"
-        ondragover="event.preventDefault(); this.classList.add('dragging')"
-        ondragleave="this.classList.remove('dragging')"
-        ondrop="handleDrop(event)"
-        onclick="document.getElementById('docFileInput').click()">
-        <input type="file" id="docFileInput" style="display:none" multiple onchange="handleDocUpload(this)"/>
-        <div class="upload-zone-icon">📤</div>
-        <div class="upload-zone-title">Drag & Drop Documents Here</div>
-        <div class="upload-zone-sub">Supports passports, permits, FOMEMA results, insurance docs · PDF, JPG, PNG<br>AI will auto-extract and tag worker data via OCR Workflow</div>
-      </div>
-
-      <div class="card" style="margin: 0 0 20px;">
-        <div class="card-header">
-          <div class="card-title">📂 Document Library</div>
-          <select class="filter-select" style="font-size:12px;" onchange="showToast('🔍 Category filter applied')">
-            <option>All Categories</option>
-            <option>Passports</option>
-            <option>Permits (PLKS/EP)</option>
-            <option>FOMEMA Results</option>
-            <option>Insurance (FWHS/IG)</option>
-            <option>Work Contracts</option>
+        <div class="form-group">
+          <label class="form-label">Permit Type</label>
+          <select class="form-input">
+            <option>PLKS (Pas Lawatan Kerja Sementara)</option>
+            <option>EP (Employment Pass)</option>
+            <option>RP (Resident Pass)</option>
+            <option>VP (Visit Pass)</option>
           </select>
         </div>
-        <div class="doc-grid" id="docGrid">
-          <div class="doc-card" onclick="showToast('📄 Opening: Thida Win — Passport')">
-            <div class="doc-thumb img">🛂</div>
-            <div class="doc-info">
-              <div class="doc-name">Passport — Thida Win</div>
-              <div class="doc-meta">Uploaded 2 Feb 2025 · 1.2 MB</div>
-              <span class="doc-tag">PASSPORT</span>
-            </div>
-          </div>
-          <div class="doc-card" onclick="showToast('📄 Opening: Mohammad Shahril — PLKS')">
-            <div class="doc-thumb pdf">📋</div>
-            <div class="doc-info">
-              <div class="doc-name">PLKS — Mohammad Shahril</div>
-              <div class="doc-meta">Uploaded 12 Jan 2025 · 876 KB</div>
-              <span class="doc-tag">PERMIT</span>
-            </div>
-          </div>
-          <div class="doc-card" onclick="showToast('📄 Opening: FOMEMA Results Batch')">
-            <div class="doc-thumb pdf">🏥</div>
-            <div class="doc-info">
-              <div class="doc-name">FOMEMA Results — Batch Mar25</div>
-              <div class="doc-meta">Uploaded 1 Mar 2025 · 3.4 MB</div>
-              <span class="doc-tag">FOMEMA</span>
-            </div>
-          </div>
-          <div class="doc-card" onclick="showToast('📄 Opening: FWHS Insurance Certificate')">
-            <div class="doc-thumb word">🛡️</div>
-            <div class="doc-info">
-              <div class="doc-name">FWHS Certificate — Ravi Kumar</div>
-              <div class="doc-meta">Uploaded 5 Mar 2025 · 540 KB</div>
-              <span class="doc-tag">INSURANCE</span>
-            </div>
-          </div>
-          <div class="doc-card" onclick="showToast('📄 Opening: Contract — Soe Myat Thu')">
-            <div class="doc-thumb word">📝</div>
-            <div class="doc-info">
-              <div class="doc-name">Contract — Soe Myat Thu</div>
-              <div class="doc-meta">Uploaded 14 Dec 2024 · 120 KB</div>
-              <span class="doc-tag">CONTRACT</span>
-            </div>
-          </div>
-          <div class="doc-card" onclick="showToast('📄 Opening: EP Renewal — Mohammad Alam')">
-            <div class="doc-thumb pdf">📋</div>
-            <div class="doc-info">
-              <div class="doc-name">EP Renewal — Mohammad Alam</div>
-              <div class="doc-meta">Uploaded 8 Feb 2025 · 1.8 MB</div>
-              <span class="doc-tag">PERMIT</span>
-            </div>
-          </div>
-        </div>
       </div>
-    </div>
-
-    <!-- ── ALERTS ── -->
-    <div class="page" id="page-alerts">
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title">🔔 Alerts & Notifications</div>
-          <div style="display:flex; gap:8px; align-items:center;">
-            <span style="font-size:12px; color:var(--muted)">Auto-generated by Scheduled Workflow</span>
-            <button class="btn btn-ghost" style="font-size:12px; padding:6px 12px;" onclick="markAllRead()">✓ Mark All Read</button>
-          </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Permit Number</label>
+          <input class="form-input" placeholder="e.g. PLKS-A1023847" />
         </div>
-
-        <div style="display:flex; gap:8px; padding:14px 16px; border-bottom:1px solid var(--border); background:#fafcff;">
-          <button class="btn btn-ghost" style="font-size:12px; padding:6px 14px;" onclick="showToast('🔴 Showing urgent alerts')">🚨 Urgent (2)</button>
-          <button class="btn btn-ghost" style="font-size:12px; padding:6px 14px;" onclick="showToast('⚠️ Showing warnings')">⚠️ Warning (3)</button>
-          <button class="btn btn-ghost" style="font-size:12px; padding:6px 14px;" onclick="showToast('ℹ️ Showing info alerts')">ℹ️ Info (5)</button>
-          <button class="btn btn-ghost" style="font-size:12px; padding:6px 14px;" onclick="showToast('✅ Showing resolved')">✅ Resolved (12)</button>
+        <div class="form-group">
+          <label class="form-label">Expiry Date</label>
+          <input class="form-input" type="date" />
         </div>
-
-        <div class="alert-page-list">
-          <div class="big-alert urgent">
-            <div class="ba-icon">🚨</div>
-            <div class="ba-content">
-              <div class="ba-title">PLKS Permit Expiring in 5 Days — Thida Win</div>
-              <div class="ba-desc">Permit No. PLKS-C7712990 expires on 9 Mar 2025. Immediate renewal required to avoid legal non-compliance under Immigration Act 1959/63. Fine up to RM10,000 per worker applies.</div>
-              <div class="ba-meta">
-                <span class="ba-tag">🇲🇲 Myanmar</span>
-                <span class="ba-tag">PLKS</span>
-                <span class="ba-tag">Permit Renewal</span>
-                <span class="ba-time">Today, 8:00 AM (Auto)</span>
-              </div>
-            </div>
-            <div class="ba-actions">
-              <button class="btn btn-primary" style="font-size:12px; padding:7px 14px; white-space:nowrap;" onclick="showToast('🚀 Renewal workflow initiated for Thida Win')">Start Renewal</button>
-              <button class="btn btn-ghost" style="font-size:12px; padding:7px 14px;" onclick="showToast('📲 WhatsApp reminder sent')">Remind</button>
-            </div>
-          </div>
-
-          <div class="big-alert urgent">
-            <div class="ba-icon">🚨</div>
-            <div class="ba-content">
-              <div class="ba-title">PLKS Expiring in 12 Days — Mohammad Shahril</div>
-              <div class="ba-desc">Permit expires 16 Mar 2025. All renewal documents (Form IMM.12, passport copy, FOMEMA clearance) must be submitted to JTK Selangor before expiry.</div>
-              <div class="ba-meta">
-                <span class="ba-tag">🇮🇩 Indonesia</span>
-                <span class="ba-tag">PLKS</span>
-                <span class="ba-tag">JTK Submission</span>
-                <span class="ba-time">Today, 8:00 AM (Auto)</span>
-              </div>
-            </div>
-            <div class="ba-actions">
-              <button class="btn btn-primary" style="font-size:12px; padding:7px 14px; white-space:nowrap;" onclick="showToast('🚀 Renewal workflow initiated')">Start Renewal</button>
-              <button class="btn btn-ghost" style="font-size:12px; padding:7px 14px;" onclick="showToast('📲 Reminder sent')">Remind</button>
-            </div>
-          </div>
-
-          <div class="big-alert warn">
-            <div class="ba-icon">⚠️</div>
-            <div class="ba-content">
-              <div class="ba-title">FOMEMA Medical Exam Overdue — 3 Workers</div>
-              <div class="ba-desc">Annual medical checkup under FOMEMA is overdue for Ravi Kumar, Mohammad Alam, and Ali Hassan. Appointment booking is required. Workers cannot renew permits without valid FOMEMA clearance letter.</div>
-              <div class="ba-meta">
-                <span class="ba-tag">FOMEMA</span>
-                <span class="ba-tag">Medical</span>
-                <span class="ba-time">Yesterday, 8:00 AM (Auto)</span>
-              </div>
-            </div>
-            <div class="ba-actions">
-              <button class="btn btn-primary" style="font-size:12px; padding:7px 14px; white-space:nowrap;" onclick="showToast('📅 FOMEMA appointments booked')">Book Appointment</button>
-            </div>
-          </div>
-
-          <div class="big-alert warn">
-            <div class="ba-icon">🛡️</div>
-            <div class="ba-content">
-              <div class="ba-title">FWHS Insurance — 8 Workers Due for Renewal</div>
-              <div class="ba-desc">Foreign Workers Hospitalisation and Surgical Insurance Scheme (FWHS) renewal is due for 8 workers within 45 days. Minimum coverage: RM10,000. Employer responsibility under Employment Act Section 60K.</div>
-              <div class="ba-meta">
-                <span class="ba-tag">FWHS</span>
-                <span class="ba-tag">Insurance</span>
-                <span class="ba-time">2 days ago (Auto)</span>
-              </div>
-            </div>
-            <div class="ba-actions">
-              <button class="btn btn-primary" style="font-size:12px; padding:7px 14px; white-space:nowrap;" onclick="showToast('🛡️ FWHS renewal workflow started')">Renew Now</button>
-            </div>
-          </div>
-
-          <div class="big-alert info">
-            <div class="ba-icon">✅</div>
-            <div class="ba-content">
-              <div class="ba-title">EP Permit Renewed Successfully — Ravi Kumar</div>
-              <div class="ba-desc">Employment Pass renewed. New expiry: 1 Apr 2026. Documents updated in system. WhatsApp confirmation sent to worker and employer contact.</div>
-              <div class="ba-meta">
-                <span class="ba-tag">🇮🇳 India</span>
-                <span class="ba-tag">EP</span>
-                <span class="ba-tag">Completed</span>
-                <span class="ba-time">3 days ago</span>
-              </div>
-            </div>
-            <div class="ba-actions">
-              <button class="btn btn-ghost" style="font-size:12px; padding:7px 14px; white-space:nowrap;" onclick="showToast('📄 Viewing permit document')">View Doc</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div><!-- end content -->
-</div><!-- end main -->
-
-<!-- ADD WORKER MODAL -->
-<div class="modal-overlay" id="modalOverlay" onclick="closeModalOut(event)">
-  <div class="modal">
-    <div class="modal-title">➕ Add New Foreign Worker</div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Full Name</label>
-        <input class="form-input" placeholder="e.g. Ahmad bin Rashid"/>
       </div>
       <div class="form-group">
-        <label class="form-label">Nationality</label>
+        <label class="form-label">Department / Job Sector</label>
         <select class="form-input">
-          <option>🇮🇩 Indonesia</option>
-          <option>🇧🇩 Bangladesh</option>
-          <option>🇲🇲 Myanmar</option>
-          <option>🇮🇳 India</option>
-          <option>🇳🇵 Nepal</option>
-          <option>🇵🇭 Philippines</option>
-          <option>🇵🇰 Pakistan</option>
+          <option>Manufacturing</option>
+          <option>Construction</option>
+          <option>Plantation / Agriculture</option>
+          <option>Domestic Help</option>
+          <option>Services</option>
         </select>
       </div>
-    </div>
-    <div class="form-row">
       <div class="form-group">
-        <label class="form-label">Passport No.</label>
-        <input class="form-input" placeholder="e.g. A9182736K"/>
+        <label class="form-label">Upload Passport / Permit (optional — AI will auto-extract)</label>
+        <div
+          style="border:1.5px dashed var(--border); border-radius:9px; padding:14px; text-align:center; font-size:13px; color:var(--muted); cursor:pointer; background:var(--surface);"
+          onclick="showToast('📎 File picker — connect Dify OCR Workflow in production')">
+          📎 &nbsp;Click to upload passport image or PDF
+        </div>
       </div>
-      <div class="form-group">
-        <label class="form-label">Permit Type</label>
-        <select class="form-input">
-          <option>PLKS (Pas Lawatan Kerja Sementara)</option>
-          <option>EP (Employment Pass)</option>
-          <option>RP (Resident Pass)</option>
-          <option>VP (Visit Pass)</option>
-        </select>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveWorker()">💾 Save Worker</button>
       </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Permit Number</label>
-        <input class="form-input" placeholder="e.g. PLKS-A1023847"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Expiry Date</label>
-        <input class="form-input" type="date"/>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Department / Job Sector</label>
-      <select class="form-input">
-        <option>Manufacturing</option>
-        <option>Construction</option>
-        <option>Plantation / Agriculture</option>
-        <option>Domestic Help</option>
-        <option>Services</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Upload Passport / Permit (optional — AI will auto-extract)</label>
-      <div style="border:1.5px dashed var(--border); border-radius:9px; padding:14px; text-align:center; font-size:13px; color:var(--muted); cursor:pointer; background:var(--surface);"
-        onclick="showToast('📎 File picker — connect Dify OCR Workflow in production')">
-        📎 &nbsp;Click to upload passport image or PDF
-      </div>
-    </div>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-      <button class="btn btn-primary" onclick="saveWorker()">💾 Save Worker</button>
     </div>
   </div>
-</div>
 
-<!-- TOAST -->
-<div class="toast" id="toast">
-  <span class="toast-icon" id="toastIcon">✅</span>
-  <span id="toastMsg">Action completed</span>
-</div>
+  <!-- TOAST -->
+  <div class="toast" id="toast">
+    <span class="toast-icon" id="toastIcon">✅</span>
+    <span id="toastMsg">Action completed</span>
+  </div>
 
-<script>
-// ── PAGE SWITCHING ──
-function switchPage(id, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  <script>
+    // ── PAGE SWITCHING ──
+    function switchPage(id, el) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
 
-  const page = document.getElementById('page-' + id);
-  if (page) {
-    page.classList.add('active');
-    if (id === 'ai') { page.style.display = 'flex'; page.style.height = 'calc(100vh - 60px)'; }
-    else { page.style.display = ''; }
-  }
-  if (el) el.classList.add('active');
+      const page = document.getElementById('page-' + id);
+      if (page) {
+        page.classList.add('active');
+        if (id === 'ai') { page.style.display = 'flex'; page.style.height = 'calc(100vh - 60px)'; }
+        else { page.style.display = ''; }
+      }
+      if (el) el.classList.add('active');
 
-  const titles = { dashboard:'Dashboard', workers:'Workers', ai:'AI Compliance Assistant', documents:'Documents', alerts:'Alerts & Notifications' };
-  document.getElementById('topbarTitle').textContent = titles[id] || id;
+      const titles = { dashboard: 'Dashboard', workers: 'Workers', ai: 'AI Compliance Assistant', documents: 'Documents', alerts: 'Alerts & Notifications' };
+      document.getElementById('topbarTitle').textContent = titles[id] || id;
 
-  const actions = {
-    dashboard: { text:'+ Add Worker', fn:'openModal()' },
-    workers: { text:'+ Add Worker', fn:'openModal()' },
-    ai: { text:'New Chat', fn:"showToast('💬 New chat started')" },
-    documents: { text:'Upload Doc', fn:"document.getElementById('docFileInput').click()" },
-    alerts: { text:'Settings', fn:"showToast('⚙️ Alert settings')" },
-  };
-  const act = actions[id];
-  if (act) {
-    const btn = document.getElementById('topbarAction');
-    btn.textContent = act.text;
-    btn.setAttribute('onclick', act.fn);
-  }
+      const actions = {
+        dashboard: { text: '+ Add Worker', fn: 'openModal()' },
+        workers: { text: '+ Add Worker', fn: 'openModal()' },
+        ai: { text: 'New Chat', fn: "showToast('💬 New chat started')" },
+        documents: { text: 'Upload Doc', fn: "document.getElementById('docFileInput').click()" },
+        alerts: { text: 'Settings', fn: "showToast('⚙️ Alert settings')" },
+      };
+      const act = actions[id];
+      if (act) {
+        const btn = document.getElementById('topbarAction');
+        btn.textContent = act.text;
+        btn.setAttribute('onclick', act.fn);
+      }
 
-  const content = document.getElementById('mainContent');
-  if (id === 'ai') { content.classList.add('no-pad'); content.style.overflow = 'hidden'; }
-  else { content.classList.remove('no-pad'); content.style.overflow = ''; }
-}
+      const content = document.getElementById('mainContent');
+      if (id === 'ai') { content.classList.add('no-pad'); content.style.overflow = 'hidden'; }
+      else { content.classList.remove('no-pad'); content.style.overflow = ''; }
+    }
 
-// ── AI CHAT ──
-const aiResponses = {
-  'fomema': `📋 <strong>FOMEMA Requirements — Indonesian Workers (Year 3)</strong><br><br>
+    // ── AI CHAT ──
+    const aiResponses = {
+      'fomema': `📋 <strong>FOMEMA Requirements — Indonesian Workers (Year 3)</strong><br><br>
 For workers entering their 3rd year of employment, the annual FOMEMA examination includes:<br><br>
 • <strong>Full medical examination</strong> at an approved FOMEMA clinic<br>
 • <strong>Chest X-ray</strong> (TB screening mandatory)<br>
@@ -1199,7 +2363,7 @@ For workers entering their 3rd year of employment, the annual FOMEMA examination
 Workers who fail FOMEMA must be repatriated within <strong>14 days</strong> per Jabatan Imigresen circular JIM/09/2024.<br><br>
 <em>Note: FOMEMA clinics can be located at fomema.com.my</em>`,
 
-  'plks': `📋 <strong>PLKS Renewal Process — Required Documents</strong><br><br>
+      'plks': `📋 <strong>PLKS Renewal Process — Required Documents</strong><br><br>
 To renew a Pas Lawatan Kerja Sementara (PLKS), prepare:<br><br>
 <strong>1. Immigration Department (JIM):</strong><br>
 • Form IMM.12 (duly completed by employer)<br>
@@ -1215,7 +2379,7 @@ To renew a Pas Lawatan Kerja Sementara (PLKS), prepare:<br><br>
 • Passport-size photos (2 copies)<br><br>
 ⏱️ Processing time: <strong>7–14 working days</strong>`,
 
-  'fwhs': `🛡️ <strong>Foreign Workers Hospitalisation and Surgical Insurance Scheme (FWHS)</strong><br><br>
+      'fwhs': `🛡️ <strong>Foreign Workers Hospitalisation and Surgical Insurance Scheme (FWHS)</strong><br><br>
 <strong>What is FWHS?</strong><br>
 A mandatory insurance scheme under Employment Act 1955 (Section 60K) covering foreign workers for hospitalisation and surgical expenses.<br><br>
 <strong>Coverage Requirements:</strong><br>
@@ -1226,7 +2390,7 @@ A mandatory insurance scheme under Employment Act 1955 (Section 60K) covering fo
 All foreign workers on PLKS, EP, or RP permits regardless of sector or salary.<br><br>
 <strong>Non-compliance penalty:</strong> Fine up to <strong>RM50,000</strong> or 2 years imprisonment under Employment Act Section 99A.`,
 
-  'employment act': `⚖️ <strong>Employment Act 1955 — Key Penalties for Non-Compliance</strong><br><br>
+      'employment act': `⚖️ <strong>Employment Act 1955 — Key Penalties for Non-Compliance</strong><br><br>
 • <strong>Section 60K</strong> (No insurance): Fine up to RM50,000 / 2 years jail<br>
 • <strong>Section 69</strong> (Unpaid wages): Fine up to RM10,000 per worker<br>
 • <strong>Section 100A</strong> (General offence): Fine up to RM10,000<br><br>
@@ -1235,14 +2399,14 @@ All foreign workers on PLKS, EP, or RP permits regardless of sector or salary.<b
 • Expired permit: Fine up to <strong>RM10,000</strong> per worker<br><br>
 Enforcement is carried out by JTK, Jabatan Imigresen, and PDRM.`,
 
-  'expiring': `📅 <strong>Workers with Permits Expiring in 30 Days</strong><br><br>
+      'expiring': `📅 <strong>Workers with Permits Expiring in 30 Days</strong><br><br>
 Based on current database records:<br><br>
 1. 🇲🇲 <strong>Thida Win</strong> — PLKS expires in <span style="color:var(--red); font-weight:700">5 days</span> (9 Mar 2025)<br>
 2. 🇮🇩 <strong>Mohammad Shahril</strong> — PLKS expires in <span style="color:var(--red); font-weight:700">12 days</span> (16 Mar 2025)<br>
 3. 🇮🇳 <strong>Ravi Kumar</strong> — EP expires in <span style="color:var(--orange); font-weight:700">28 days</span> (1 Apr 2025)<br><br>
 ⚠️ Recommend immediate action for Thida Win — permit expires in 5 days. Click <strong>Start Renewal</strong> in Alerts to trigger the automated workflow.`,
 
-  'checklist': `✅ <strong>Compliance Checklist — New Indonesian Worker</strong><br><br>
+      'checklist': `✅ <strong>Compliance Checklist — New Indonesian Worker</strong><br><br>
 <strong>Before Arrival:</strong><br>
 ☐ Obtain Calling Visa from JIM (Form IM.47)<br>
 ☐ Register with FWCMS (Foreign Workers Centralised Management System)<br>
@@ -1261,88 +2425,88 @@ Based on current database records:<br><br>
 ☐ Annual FWHS insurance renewal<br>
 ☐ PLKS permit renewal (before expiry)`,
 
-  'default': `I've searched the Jabatan Imigresen policy database and Employment Act 1955 knowledge base for your query.<br><br>Based on current Malaysian regulations, I can provide guidance on:<br><br>• 📋 Permit types (PLKS, EP, RP, VP) and renewal procedures<br>• 🏥 FOMEMA medical examination requirements<br>• 🛡️ FWHS/IG insurance obligations<br>• ⚖️ Employment Act 1955 compliance<br>• 📲 JTK and JIM submission procedures<br><br>Could you be more specific about which aspect you'd like help with?`
-};
+      'default': `I've searched the Jabatan Imigresen policy database and Employment Act 1955 knowledge base for your query.<br><br>Based on current Malaysian regulations, I can provide guidance on:<br><br>• 📋 Permit types (PLKS, EP, RP, VP) and renewal procedures<br>• 🏥 FOMEMA medical examination requirements<br>• 🛡️ FWHS/IG insurance obligations<br>• ⚖️ Employment Act 1955 compliance<br>• 📲 JTK and JIM submission procedures<br><br>Could you be more specific about which aspect you'd like help with?`
+    };
 
-let pendingFile = null;
+    let pendingFile = null;
 
-function askQuestion(q) {
-  document.getElementById('chatInput').value = q;
-  switchPage('ai', document.querySelectorAll('.nav-item')[2]);
-  setTimeout(sendMessage, 100);
-}
+    function askQuestion(q) {
+      document.getElementById('chatInput').value = q;
+      switchPage('ai', document.querySelectorAll('.nav-item')[2]);
+      setTimeout(sendMessage, 100);
+    }
 
-function triggerUploadPrompt() {
-  switchPage('ai', document.querySelectorAll('.nav-item')[2]);
-  setTimeout(() => document.getElementById('fileInput').click(), 200);
-}
+    function triggerUploadPrompt() {
+      switchPage('ai', document.querySelectorAll('.nav-item')[2]);
+      setTimeout(() => document.getElementById('fileInput').click(), 200);
+    }
 
-function handleFileUpload(input) {
-  if (input.files.length) {
-    pendingFile = input.files[0];
-    document.getElementById('uploadName').textContent = pendingFile.name;
-    document.getElementById('uploadPreview').classList.add('visible');
-  }
-}
+    function handleFileUpload(input) {
+      if (input.files.length) {
+        pendingFile = input.files[0];
+        document.getElementById('uploadName').textContent = pendingFile.name;
+        document.getElementById('uploadPreview').classList.add('visible');
+      }
+    }
 
-function removeUpload() {
-  pendingFile = null;
-  document.getElementById('uploadPreview').classList.remove('visible');
-  document.getElementById('fileInput').value = '';
-}
+    function removeUpload() {
+      pendingFile = null;
+      document.getElementById('uploadPreview').classList.remove('visible');
+      document.getElementById('fileInput').value = '';
+    }
 
-function handleEnter(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
-}
+    function handleEnter(e) {
+      if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+    }
 
-function sendMessage() {
-  const input = document.getElementById('chatInput');
-  const text = input.value.trim();
-  if (!text && !pendingFile) return;
+    function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text && !pendingFile) return;
 
-  const messages = document.getElementById('chatMessages');
-  const now = new Date().toLocaleTimeString('en-MY', {hour:'2-digit', minute:'2-digit'});
+      const messages = document.getElementById('chatMessages');
+      const now = new Date().toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit' });
 
-  // User message
-  const userDiv = document.createElement('div');
-  userDiv.className = 'msg user';
-  let userContent = text || '';
-  if (pendingFile) userContent = (userContent ? userContent + '<br>' : '') + `📎 <em>${pendingFile.name}</em>`;
-  userDiv.innerHTML = `
+      // User message
+      const userDiv = document.createElement('div');
+      userDiv.className = 'msg user';
+      let userContent = text || '';
+      if (pendingFile) userContent = (userContent ? userContent + '<br>' : '') + `📎 <em>${pendingFile.name}</em>`;
+      userDiv.innerHTML = `
     <div class="msg-avatar">SR</div>
     <div class="msg-meta">
       <div class="msg-bubble">${userContent}</div>
       <div class="msg-time">${now}</div>
     </div>`;
-  messages.appendChild(userDiv);
+      messages.appendChild(userDiv);
 
-  // Typing indicator
-  const typingDiv = document.createElement('div');
-  typingDiv.className = 'msg bot';
-  typingDiv.id = 'typing';
-  typingDiv.innerHTML = `<div class="msg-avatar">🤖</div><div class="msg-meta"><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
-  messages.appendChild(typingDiv);
-  messages.scrollTop = messages.scrollHeight;
+      // Typing indicator
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'msg bot';
+      typingDiv.id = 'typing';
+      typingDiv.innerHTML = `<div class="msg-avatar">🤖</div><div class="msg-meta"><div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
+      messages.appendChild(typingDiv);
+      messages.scrollTop = messages.scrollHeight;
 
-  input.value = '';
-  const file = pendingFile;
-  removeUpload();
+      input.value = '';
+      const file = pendingFile;
+      removeUpload();
 
-  // Determine response
-  setTimeout(() => {
-    document.getElementById('typing')?.remove();
+      // Determine response
+      setTimeout(() => {
+        document.getElementById('typing')?.remove();
 
-    let response = aiResponses['default'];
-    const q = text.toLowerCase();
-    if (q.includes('fomema')) response = aiResponses['fomema'];
-    else if (q.includes('plks') || q.includes('renew') || q.includes('permit')) response = aiResponses['plks'];
-    else if (q.includes('fwhs') || q.includes('insurance')) response = aiResponses['fwhs'];
-    else if (q.includes('employment act') || q.includes('penalty') || q.includes('penalt')) response = aiResponses['employment act'];
-    else if (q.includes('expir') || q.includes('30 days')) response = aiResponses['expiring'];
-    else if (q.includes('checklist') || q.includes('new worker')) response = aiResponses['checklist'];
+        let response = aiResponses['default'];
+        const q = text.toLowerCase();
+        if (q.includes('fomema')) response = aiResponses['fomema'];
+        else if (q.includes('plks') || q.includes('renew') || q.includes('permit')) response = aiResponses['plks'];
+        else if (q.includes('fwhs') || q.includes('insurance')) response = aiResponses['fwhs'];
+        else if (q.includes('employment act') || q.includes('penalty') || q.includes('penalt')) response = aiResponses['employment act'];
+        else if (q.includes('expir') || q.includes('30 days')) response = aiResponses['expiring'];
+        else if (q.includes('checklist') || q.includes('new worker')) response = aiResponses['checklist'];
 
-    if (file) {
-      response = `🔍 <strong>OCR Processing: ${file.name}</strong><br><br>
+        if (file) {
+          response = `🔍 <strong>OCR Processing: ${file.name}</strong><br><br>
 Dify Document Extractor Workflow has processed the uploaded file.<br><br>
 <strong>Extracted Data:</strong><br>
 • Name: <strong>Extracted from document</strong><br>
@@ -1351,100 +2515,101 @@ Dify Document Extractor Workflow has processed the uploaded file.<br><br>
 • Nationality: <strong>Identified from document header</strong><br>
 • Expiry: <strong>Extracted and saved</strong><br><br>
 ✅ Worker profile has been updated in the database. Would you like to verify the extracted data?`;
-    }
+        }
 
-    const botDiv = document.createElement('div');
-    botDiv.className = 'msg bot';
-    const sources = file
-      ? `<span class="source-chip">🔍 Dify OCR Workflow</span>`
-      : `<span class="source-chip">📚 JIM Policy DB</span><span class="source-chip">⚖️ Employment Act</span>`;
-    botDiv.innerHTML = `
+        const botDiv = document.createElement('div');
+        botDiv.className = 'msg bot';
+        const sources = file
+          ? `<span class="source-chip">🔍 Dify OCR Workflow</span>`
+          : `<span class="source-chip">📚 JIM Policy DB</span><span class="source-chip">⚖️ Employment Act</span>`;
+        botDiv.innerHTML = `
       <div class="msg-avatar">🤖</div>
       <div class="msg-meta">
         <div class="msg-bubble">${response}<div style="margin-top:8px">${sources}</div></div>
-        <div class="msg-time">${new Date().toLocaleTimeString('en-MY', {hour:'2-digit', minute:'2-digit'})}</div>
+        <div class="msg-time">${new Date().toLocaleTimeString('en-MY', { hour: '2-digit', minute: '2-digit' })}</div>
       </div>`;
-    messages.appendChild(botDiv);
-    messages.scrollTop = messages.scrollHeight;
-  }, 1400);
-}
+        messages.appendChild(botDiv);
+        messages.scrollTop = messages.scrollHeight;
+      }, 1400);
+    }
 
-// ── WORKERS FILTER ──
-function filterWorkers(val) {
-  const rows = document.querySelectorAll('#workersBody tr');
-  rows.forEach(row => {
-    row.style.display = row.textContent.toLowerCase().includes(val.toLowerCase()) ? '' : 'none';
-  });
-}
+    // ── WORKERS FILTER ──
+    function filterWorkers(val) {
+      const rows = document.querySelectorAll('#workersBody tr');
+      rows.forEach(row => {
+        row.style.display = row.textContent.toLowerCase().includes(val.toLowerCase()) ? '' : 'none';
+      });
+    }
 
-// ── MODAL ──
-function openModal() { document.getElementById('modalOverlay').classList.add('open'); }
-function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
-function closeModalOut(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
-function saveWorker() {
-  closeModal();
-  showToast('✅ Worker added successfully! Profile created in database.');
-}
+    // ── MODAL ──
+    function openModal() { document.getElementById('modalOverlay').classList.add('open'); }
+    function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+    function closeModalOut(e) { if (e.target === document.getElementById('modalOverlay')) closeModal(); }
+    function saveWorker() {
+      closeModal();
+      showToast('✅ Worker added successfully! Profile created in database.');
+    }
 
-// ── DOCUMENTS ──
-function handleDrop(e) {
-  e.preventDefault();
-  document.getElementById('uploadZone').classList.remove('dragging');
-  const file = e.dataTransfer.files[0];
-  if (file) addDocCard(file.name);
-}
-function handleDocUpload(input) {
-  if (input.files.length) { addDocCard(input.files[0].name); input.value=''; }
-}
-function addDocCard(name) {
-  const grid = document.getElementById('docGrid');
-  const ext = name.split('.').pop().toLowerCase();
-  const isImg = ['jpg','jpeg','png'].includes(ext);
-  const card = document.createElement('div');
-  card.className = 'doc-card';
-  card.style.animation = 'modalIn .3s ease';
-  card.onclick = () => showToast(`📄 Opening: ${name}`);
-  card.innerHTML = `
-    <div class="doc-thumb ${isImg?'img':'pdf'}">${isImg?'🖼️':'📋'}</div>
+    // ── DOCUMENTS ──
+    function handleDrop(e) {
+      e.preventDefault();
+      document.getElementById('uploadZone').classList.remove('dragging');
+      const file = e.dataTransfer.files[0];
+      if (file) addDocCard(file.name);
+    }
+    function handleDocUpload(input) {
+      if (input.files.length) { addDocCard(input.files[0].name); input.value = ''; }
+    }
+    function addDocCard(name) {
+      const grid = document.getElementById('docGrid');
+      const ext = name.split('.').pop().toLowerCase();
+      const isImg = ['jpg', 'jpeg', 'png'].includes(ext);
+      const card = document.createElement('div');
+      card.className = 'doc-card';
+      card.style.animation = 'modalIn .3s ease';
+      card.onclick = () => showToast(`📄 Opening: ${name}`);
+      card.innerHTML = `
+    <div class="doc-thumb ${isImg ? 'img' : 'pdf'}">${isImg ? '🖼️' : '📋'}</div>
     <div class="doc-info">
       <div class="doc-name">${name}</div>
       <div class="doc-meta">Just uploaded · Processing…</div>
       <span class="doc-tag">NEW</span>
     </div>`;
-  grid.insertBefore(card, grid.firstChild);
-  showToast(`✅ "${name}" uploaded — Dify OCR workflow triggered`);
-}
+      grid.insertBefore(card, grid.firstChild);
+      showToast(`✅ "${name}" uploaded — Dify OCR workflow triggered`);
+    }
 
-// ── ALERTS ──
-function markAllRead() { showToast('✅ All alerts marked as read'); }
+    // ── ALERTS ──
+    function markAllRead() { showToast('✅ All alerts marked as read'); }
 
-// ── TOAST ──
-let toastTimeout;
-function showToast(msg) {
-  const toast = document.getElementById('toast');
-  document.getElementById('toastMsg').textContent = msg;
-  toast.classList.add('show');
-  clearTimeout(toastTimeout);
-  toastTimeout = setTimeout(() => toast.classList.remove('show'), 3000);
-}
+    // ── TOAST ──
+    let toastTimeout;
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => toast.classList.remove('show'), 3000);
+    }
 
-// ── LANG TOGGLE ──
-function toggleLang(lang, el) {
-  document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-  el.classList.add('active');
-  showToast(lang === 'BM' ? '🇲🇾 Antara muka ditukar ke Bahasa Malaysia' : '🇬🇧 Interface switched to English');
-}
+    // ── LANG TOGGLE ──
+    function toggleLang(lang, el) {
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      showToast(lang === 'BM' ? '🇲🇾 Antara muka ditukar ke Bahasa Malaysia' : '🇬🇧 Interface switched to English');
+    }
 
-// ── WORKER DETAIL ──
-function showWorker(name) {
-  showToast(`👁️ Viewing full profile: ${name}`);
-}
+    // ── WORKER DETAIL ──
+    function showWorker(name) {
+      showToast(`👁️ Viewing full profile: ${name}`);
+    }
 
-// ── INIT ──
-document.addEventListener('DOMContentLoaded', () => {
-  // Activate dashboard by default
-  document.querySelector('.nav-item').classList.add('active');
-});
-</script>
+    // ── INIT ──
+    document.addEventListener('DOMContentLoaded', () => {
+      // Activate dashboard by default
+      document.querySelector('.nav-item').classList.add('active');
+    });
+  </script>
 </body>
+
 </html>
