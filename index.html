@@ -7,25 +7,29 @@
   <title>WorkerHub MY — Smart Foreign Worker Compliance</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Syne:wght@500;600;700;800&display=swap"
-    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --navy: #0C1B33;
-      --navy2: #142240;
-      --teal: #0ABFBC;
-      --teal2: #07929F;
-      --gold: #F7B731;
-      --red: #FF4757;
-      --green: #2ED573;
-      --orange: #FFA502;
-      --surface: #F0F4FA;
+      /* Modern Corporate Palette */
+      --navy: #0F172A;
+      --navy2: #1E293B;
+      --teal: #0284C7;
+      --teal2: #0369A1;
+      --gold: #EAB308;
+      --red: #EF4444;
+      --green: #10B981;
+      --orange: #F59E0B;
+      --surface: #F8FAFC;
       --card: #FFFFFF;
-      --text: #1A2744;
-      --muted: #6B7A99;
-      --border: #DDE4F0;
-      --sidebar-w: 240px;
+      --text: #0F172A;
+      --muted: #64748B;
+      --border: #E2E8F0;
+      --sidebar-w: 260px;
+
+      /* Premium Elevation */
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
     }
 
     * {
@@ -34,8 +38,13 @@
       padding: 0;
     }
 
+    html {
+      font-size: 100%;
+      /* Browser default, usually 16px */
+    }
+
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       background: var(--surface);
       color: var(--text);
       min-height: 100vh;
@@ -44,7 +53,20 @@
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       text-rendering: optimizeLegibility;
-      line-height: 1.5;
+      line-height: 1.6;
+      font-size: 0.875rem;
+      /* 14px fallback */
+    }
+
+    /* Responsive typography clamp for major titles */
+    .page-title {
+      font-size: clamp(1.125rem, 2vw + 0.5rem, 1.35rem) !important;
+      letter-spacing: -0.01em;
+    }
+
+    .stat-val {
+      font-size: clamp(1.5rem, 3vw, 2rem) !important;
+      letter-spacing: -0.01em;
     }
 
     /* ── SIDEBAR ── */
@@ -77,20 +99,20 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 1.125rem;
       flex-shrink: 0;
     }
 
     .logo-text {
-      font-family: 'Syne', sans-serif;
-      font-weight: 800;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
       color: #fff;
-      font-size: 15px;
+      font-size: 0.9375rem;
       line-height: 1.2;
     }
 
     .logo-sub {
-      font-size: 10px;
+      font-size: 0.625rem;
       color: var(--teal);
       letter-spacing: .05em;
     }
@@ -100,7 +122,7 @@
     }
 
     .nav-label {
-      font-size: 11px;
+      font-size: 0.6875rem;
       letter-spacing: .12em;
       color: rgba(255, 255, 255, .3);
       font-weight: 600;
@@ -116,7 +138,7 @@
       border-radius: 10px;
       cursor: pointer;
       color: rgba(255, 255, 255, .55);
-      font-size: 14px;
+      font-size: 0.875rem;
       font-weight: 500;
       transition: all .2s;
       margin-bottom: 2px;
@@ -146,7 +168,7 @@
     }
 
     .nav-icon {
-      font-size: 17px;
+      font-size: 1.0625rem;
       width: 20px;
       text-align: center;
       flex-shrink: 0;
@@ -156,7 +178,7 @@
       margin-left: auto;
       background: var(--red);
       color: #fff;
-      font-size: 11px;
+      font-size: 0.6875rem;
       font-weight: 700;
       border-radius: 20px;
       padding: 2px 7px;
@@ -196,19 +218,19 @@
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 13px;
+      font-size: 0.8125rem;
       color: var(--navy);
       flex-shrink: 0;
     }
 
     .user-name {
-      font-size: 13px;
+      font-size: 0.8125rem;
       font-weight: 600;
       color: #fff;
     }
 
     .user-role {
-      font-size: 12px;
+      font-size: 0.75rem;
       color: rgba(255, 255, 255, .4);
     }
 
@@ -226,6 +248,7 @@
     .topbar {
       background: var(--card);
       border-bottom: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
       padding: 0 28px;
       height: 60px;
       display: flex;
@@ -238,8 +261,8 @@
     }
 
     .page-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 17px;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.0625rem;
       font-weight: 700;
       color: var(--text);
       flex: 1;
@@ -253,7 +276,7 @@
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 7px 14px;
-      font-size: 13px;
+      font-size: 0.8125rem;
       color: var(--muted);
       width: 220px;
       cursor: pointer;
@@ -262,7 +285,7 @@
     .btn {
       padding: 8px 16px;
       border-radius: 10px;
-      font-size: 13px;
+      font-size: 0.8125rem;
       font-weight: 600;
       border: none;
       cursor: pointer;
@@ -305,7 +328,7 @@
       justify-content: center;
       cursor: pointer;
       position: relative;
-      font-size: 16px;
+      font-size: 1rem;
       transition: background .2s;
     }
 
@@ -334,7 +357,7 @@
 
     .lang-btn {
       padding: 6px 10px;
-      font-size: 11px;
+      font-size: 0.6875rem;
       font-weight: 700;
       cursor: pointer;
       transition: all .2s;
@@ -377,8 +400,10 @@
     }
 
     .stat-card {
+      box-shadow: var(--shadow-sm);
+      border-radius: 12px;
       background: var(--card);
-      border-radius: 14px;
+      border-radius: 10px;
       padding: 20px;
       border: 1px solid var(--border);
       position: relative;
@@ -389,7 +414,8 @@
 
     .stat-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(10, 191, 188, .1);
+      box-shadow: var(--shadow-md);
+      border-color: var(--teal);
     }
 
     .stat-card::after {
@@ -420,21 +446,21 @@
     }
 
     .stat-label {
-      font-size: 12px;
+      font-size: 0.75rem;
       color: var(--muted);
       font-weight: 500;
       margin-bottom: 8px;
     }
 
     .stat-val {
-      font-family: 'Syne', sans-serif;
-      font-size: 28px;
-      font-weight: 800;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.75rem;
+      font-weight: 700;
       color: var(--text);
     }
 
     .stat-sub {
-      font-size: 12px;
+      font-size: 0.75rem;
       color: var(--muted);
       margin-top: 4px;
     }
@@ -443,13 +469,14 @@
       position: absolute;
       right: 18px;
       top: 18px;
-      font-size: 22px;
+      font-size: 1.375rem;
     }
 
     /* ── TABLE ── */
     .card {
+      box-shadow: var(--shadow-sm);
       background: var(--card);
-      border-radius: 14px;
+      border-radius: 10px;
       border: 1px solid var(--border);
       overflow: hidden;
     }
@@ -463,8 +490,8 @@
     }
 
     .card-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9375rem;
       font-weight: 700;
       flex: 1;
     }
@@ -477,7 +504,7 @@
     th {
       padding: 10px 16px;
       text-align: left;
-      font-size: 12px;
+      font-size: 0.75rem;
       font-weight: 700;
       letter-spacing: .06em;
       text-transform: uppercase;
@@ -488,7 +515,7 @@
 
     td {
       padding: 13px 16px;
-      font-size: 13px;
+      font-size: 0.8125rem;
       border-bottom: 1px solid var(--border);
       vertical-align: middle;
     }
@@ -507,7 +534,7 @@
     }
 
     .worker-id {
-      font-size: 11px;
+      font-size: 0.6875rem;
       color: var(--muted);
       margin-top: 2px;
     }
@@ -518,7 +545,7 @@
       gap: 5px;
       padding: 3px 10px;
       border-radius: 20px;
-      font-size: 11px;
+      font-size: 0.6875rem;
       font-weight: 700;
     }
 
@@ -557,14 +584,14 @@
     }
 
     .flag {
-      font-size: 18px;
+      font-size: 1.125rem;
     }
 
     .permit-type {
       background: rgba(12, 27, 51, .07);
       padding: 3px 9px;
       border-radius: 6px;
-      font-size: 11px;
+      font-size: 0.6875rem;
       font-weight: 700;
       color: var(--navy2);
     }
@@ -598,7 +625,7 @@
       padding: 8px 14px;
       border: 1px solid var(--border);
       border-radius: 8px;
-      font-size: 13px;
+      font-size: 0.8125rem;
       font-family: 'Inter', sans-serif;
       outline: none;
       color: var(--text);
@@ -613,7 +640,7 @@
       padding: 8px 12px;
       border: 1px solid var(--border);
       border-radius: 8px;
-      font-size: 13px;
+      font-size: 0.8125rem;
       font-family: 'Inter', sans-serif;
       outline: none;
       color: var(--text);
@@ -632,7 +659,7 @@
       border: 1px solid var(--border);
       background: none;
       cursor: pointer;
-      font-size: 14px;
+      font-size: 0.875rem;
       transition: all .2s;
       display: inline-flex;
       align-items: center;
@@ -703,26 +730,26 @@
     }
 
     .alert-icon {
-      font-size: 20px;
+      font-size: 1.25rem;
       flex-shrink: 0;
       margin-top: 1px;
     }
 
     .alert-title {
-      font-size: 13px;
+      font-size: 0.8125rem;
       font-weight: 600;
       color: var(--text);
     }
 
     .alert-desc {
-      font-size: 12px;
+      font-size: 0.75rem;
       color: var(--muted);
       margin-top: 2px;
       line-height: 1.5;
     }
 
     .alert-time {
-      font-size: 11px;
+      font-size: 0.6875rem;
       color: var(--muted);
       margin-top: 4px;
     }
@@ -748,14 +775,14 @@
     }
 
     .chat-sidebar-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.875rem;
       font-weight: 700;
       margin-bottom: 4px;
     }
 
     .chat-sidebar-sub {
-      font-size: 12px;
+      font-size: 0.75rem;
       color: var(--muted);
     }
 
@@ -766,7 +793,7 @@
     }
 
     .qp-label {
-      font-size: 11px;
+      font-size: 0.6875rem;
       font-weight: 700;
       letter-spacing: .08em;
       color: var(--muted);
@@ -782,7 +809,7 @@
       border-radius: 10px;
       border: 1px solid var(--border);
       background: #fff;
-      font-size: 12px;
+      font-size: 0.75rem;
       font-weight: 500;
       color: var(--text);
       cursor: pointer;
@@ -811,7 +838,7 @@
       color: var(--teal2);
       border-radius: 6px;
       padding: 4px 10px;
-      font-size: 11px;
+      font-size: 0.6875rem;
       font-weight: 600;
     }
 
@@ -839,17 +866,17 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: 1.125rem;
       flex-shrink: 0;
     }
 
     .ai-name {
       font-weight: 700;
-      font-size: 14px;
+      font-size: 0.875rem;
     }
 
     .ai-status {
-      font-size: 12px;
+      font-size: 0.75rem;
       color: var(--green);
       display: flex;
       align-items: center;
@@ -868,7 +895,7 @@
       margin-left: auto;
       background: var(--navy);
       color: var(--teal);
-      font-size: 11px;
+      font-size: 0.6875rem;
       font-weight: 700;
       padding: 4px 10px;
       border-radius: 6px;
@@ -898,7 +925,7 @@
     .msg-bubble {
       padding: 12px 16px;
       border-radius: 16px;
-      font-size: 13.5px;
+      font-size: 0.8438rem;
       line-height: 1.6;
     }
 
@@ -923,7 +950,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
+      font-size: 0.875rem;
     }
 
     .msg.bot .msg-avatar {
@@ -934,11 +961,11 @@
       background: linear-gradient(135deg, var(--gold), #ff9f43);
       color: var(--navy);
       font-weight: 700;
-      font-size: 12px;
+      font-size: 0.75rem;
     }
 
     .msg-time {
-      font-size: 11px;
+      font-size: 0.6875rem;
       color: var(--muted);
       margin-top: 4px;
       text-align: right;
@@ -961,7 +988,7 @@
       border: 1px solid var(--border);
       border-radius: 6px;
       padding: 3px 8px;
-      font-size: 11px;
+      font-size: 0.6875rem;
       color: var(--muted);
       margin-top: 8px;
       margin-right: 4px;
@@ -1029,7 +1056,7 @@
     }
 
     .upload-preview-name {
-      font-size: 12px;
+      font-size: 0.75rem;
       font-weight: 600;
       color: var(--teal2);
       flex: 1;
@@ -1038,7 +1065,7 @@
     .remove-upload {
       cursor: pointer;
       color: var(--red);
-      font-size: 14px;
+      font-size: 0.875rem;
     }
 
     .chat-input-row {
@@ -1052,7 +1079,7 @@
       padding: 12px 16px;
       border: 1px solid var(--border);
       border-radius: 12px;
-      font-size: 14px;
+      font-size: 0.875rem;
       font-family: 'Inter', sans-serif;
       outline: none;
       resize: none;
@@ -1075,7 +1102,7 @@
       border: 1px solid var(--border);
       background: var(--surface);
       cursor: pointer;
-      font-size: 18px;
+      font-size: 1.125rem;
       transition: all .2s;
       display: flex;
       align-items: center;
@@ -1093,7 +1120,7 @@
       background: var(--teal);
       border: none;
       cursor: pointer;
-      font-size: 18px;
+      font-size: 1.125rem;
       transition: all .2s;
       display: flex;
       align-items: center;
@@ -1107,7 +1134,7 @@
     }
 
     .hint-text {
-      font-size: 11px;
+      font-size: 0.6875rem;
       color: var(--muted);
       margin-top: 8px;
       text-align: center;
@@ -1141,7 +1168,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 40px;
+      font-size: 2.5rem;
     }
 
     .doc-thumb.pdf {
@@ -1162,7 +1189,7 @@
     }
 
     .doc-name {
-      font-size: 13px;
+      font-size: 0.8125rem;
       font-weight: 600;
       color: var(--text);
       margin-bottom: 3px;
@@ -1172,7 +1199,7 @@
     }
 
     .doc-meta {
-      font-size: 11px;
+      font-size: 0.6875rem;
       color: var(--muted);
     }
 
@@ -1182,7 +1209,7 @@
       border: 1px solid var(--border);
       border-radius: 4px;
       padding: 2px 7px;
-      font-size: 10px;
+      font-size: 0.625rem;
       font-weight: 600;
       color: var(--muted);
       margin-top: 6px;
@@ -1191,7 +1218,7 @@
     .upload-zone {
       margin: 20px;
       border: 2px dashed var(--border);
-      border-radius: 14px;
+      border-radius: 10px;
       padding: 32px;
       text-align: center;
       transition: all .25s;
@@ -1206,20 +1233,20 @@
     }
 
     .upload-zone-icon {
-      font-size: 36px;
+      font-size: 2.25rem;
       margin-bottom: 10px;
     }
 
     .upload-zone-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 15px;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9375rem;
       font-weight: 700;
       color: var(--text);
       margin-bottom: 6px;
     }
 
     .upload-zone-sub {
-      font-size: 13px;
+      font-size: 0.8125rem;
       color: var(--muted);
     }
 
@@ -1268,7 +1295,7 @@
     }
 
     .ba-icon {
-      font-size: 26px;
+      font-size: 1.625rem;
       flex-shrink: 0;
     }
 
@@ -1277,14 +1304,14 @@
     }
 
     .ba-title {
-      font-size: 14px;
+      font-size: 0.875rem;
       font-weight: 700;
       color: var(--text);
       margin-bottom: 4px;
     }
 
     .ba-desc {
-      font-size: 13px;
+      font-size: 0.8125rem;
       color: var(--muted);
       line-height: 1.5;
     }
@@ -1302,13 +1329,13 @@
       border: 1px solid var(--border);
       border-radius: 6px;
       padding: 3px 9px;
-      font-size: 11px;
+      font-size: 0.6875rem;
       font-weight: 600;
       color: var(--muted);
     }
 
     .ba-time {
-      font-size: 11px;
+      font-size: 0.6875rem;
       color: var(--muted);
       margin-left: auto;
     }
@@ -1337,6 +1364,7 @@
     }
 
     .modal {
+      box-shadow: var(--shadow-lg);
       background: var(--card);
       border-radius: 18px;
       padding: 28px;
@@ -1360,9 +1388,9 @@
     }
 
     .modal-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 18px;
-      font-weight: 800;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.125rem;
+      font-weight: 700;
       margin-bottom: 18px;
     }
 
@@ -1371,7 +1399,7 @@
     }
 
     .form-label {
-      font-size: 12px;
+      font-size: 0.75rem;
       font-weight: 700;
       color: var(--muted);
       letter-spacing: .06em;
@@ -1385,7 +1413,7 @@
       padding: 10px 14px;
       border: 1px solid var(--border);
       border-radius: 9px;
-      font-size: 13px;
+      font-size: 0.8125rem;
       font-family: 'Inter', sans-serif;
       outline: none;
       color: var(--text);
@@ -1446,7 +1474,7 @@
 
     .chart-label {
       flex: 1;
-      font-size: 9px;
+      font-size: 0.5625rem;
       text-align: center;
       color: var(--muted);
       font-weight: 600;
@@ -1480,7 +1508,7 @@
       color: #fff;
       padding: 12px 20px;
       border-radius: 12px;
-      font-size: 13px;
+      font-size: 0.8125rem;
       font-weight: 500;
       z-index: 999;
       opacity: 0;
@@ -1499,7 +1527,7 @@
     }
 
     .toast-icon {
-      font-size: 18px;
+      font-size: 1.125rem;
     }
 
     /* ── ONBOARDING PILL ── */
@@ -1511,7 +1539,7 @@
       border: 1px solid rgba(10, 191, 188, .3);
       border-radius: 20px;
       padding: 5px 12px;
-      font-size: 12px;
+      font-size: 0.75rem;
       color: var(--teal2);
       font-weight: 600;
       margin-bottom: 16px;
@@ -1520,6 +1548,43 @@
     /* ── RESPONSIVE NOTE ── */
     .chart-container {
       padding: 0 16px 16px;
+    }
+
+    /* ── RESPONSIVE MEDIA QUERIES ── */
+    @media (max-width: 1024px) {
+      .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .dash-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .topbar {
+        padding: 0 16px;
+      }
+
+      .topbar-search {
+        display: none;
+      }
+
+      .content {
+        padding: 16px;
+      }
+
+      .doc-grid {
+        grid-template-columns: repeat(1, 1fr);
+      }
     }
   </style>
 </head>
@@ -1635,13 +1700,13 @@
             <div class="card">
               <div class="card-header">
                 <div class="card-title">📅 Permit Expiry — Next 6 Months</div>
-                <button class="btn btn-ghost" style="font-size:12px; padding:6px 12px;"
+                <button class="btn btn-ghost" style="font-size: 0.75rem; padding:6px 12px;"
                   onclick="showToast('📊 Full report exported')">Export</button>
               </div>
               <div class="chart-container">
                 <div style="padding:16px 0 4px; display:flex; align-items:baseline; gap:8px;">
-                  <span style="font-family:Syne; font-size:22px; font-weight:800;">31</span>
-                  <span style="font-size:13px; color:var(--muted)">permits expiring in next 180 days</span>
+                  <span style="font-family:Syne; font-size: 1.375rem; font-weight:800;">31</span>
+                  <span style="font-size: 0.8125rem; color:var(--muted)">permits expiring in next 180 days</span>
                 </div>
                 <div class="mini-bar-chart">
                   <div class="bar active" style="height:40%"></div>
@@ -1678,7 +1743,7 @@
             <div class="card">
               <div class="card-header">
                 <div class="card-title">👷 Workers Needing Attention</div>
-                <button class="btn btn-ghost" style="font-size:12px; padding:6px 12px;"
+                <button class="btn btn-ghost" style="font-size: 0.75rem; padding:6px 12px;"
                   onclick="switchPage('workers', document.querySelectorAll('.nav-item')[1])">View All</button>
               </div>
               <table>
@@ -1788,9 +1853,9 @@
         <div class="card">
           <div class="card-header">
             <div class="card-title">👷 All Foreign Workers</div>
-            <button class="btn btn-ghost" style="font-size:12px; padding:6px 12px;"
+            <button class="btn btn-ghost" style="font-size: 0.75rem; padding:6px 12px;"
               onclick="showToast('📥 CSV exported successfully')">Export CSV</button>
-            <button class="btn btn-primary" style="font-size:12px;" onclick="openModal()">+ Add Worker</button>
+            <button class="btn btn-primary" style="font-size: 0.75rem;" onclick="openModal()">+ Add Worker</button>
           </div>
           <div class="search-filter">
             <input class="search-input" placeholder="🔍  Search by name, passport, permit number…"
@@ -1837,7 +1902,7 @@
                   <div class="worker-id">ID: W-1023847</div>
                 </td>
                 <td><span class="flag">🇮🇩</span></td>
-                <td style="font-family:monospace; font-size:12px;">A9182736K</td>
+                <td style="font-family:monospace; font-size: 0.75rem;">A9182736K</td>
                 <td><span class="permit-type">PLKS</span></td>
                 <td>16 Mar 2025</td>
                 <td><span class="days-left days-red">12</span></td>
@@ -1852,7 +1917,7 @@
                   <div class="worker-id">ID: W-9928134</div>
                 </td>
                 <td><span class="flag">🇮🇳</span></td>
-                <td style="font-family:monospace; font-size:12px;">P7634521N</td>
+                <td style="font-family:monospace; font-size: 0.75rem;">P7634521N</td>
                 <td><span class="permit-type">EP</span></td>
                 <td>01 Apr 2025</td>
                 <td><span class="days-left days-orange">28</span></td>
@@ -1867,7 +1932,7 @@
                   <div class="worker-id">ID: W-7712990</div>
                 </td>
                 <td><span class="flag">🇲🇲</span></td>
-                <td style="font-family:monospace; font-size:12px;">MA8812044</td>
+                <td style="font-family:monospace; font-size: 0.75rem;">MA8812044</td>
                 <td><span class="permit-type">PLKS</span></td>
                 <td>09 Mar 2025</td>
                 <td><span class="days-left days-red">5</span></td>
@@ -1882,7 +1947,7 @@
                   <div class="worker-id">ID: W-3310028</div>
                 </td>
                 <td><span class="flag">🇧🇩</span></td>
-                <td style="font-family:monospace; font-size:12px;">BD9012345</td>
+                <td style="font-family:monospace; font-size: 0.75rem;">BD9012345</td>
                 <td><span class="permit-type">PLKS</span></td>
                 <td>12 Sep 2025</td>
                 <td><span class="days-left days-green">192</span></td>
@@ -1897,7 +1962,7 @@
                   <div class="worker-id">ID: W-5541209</div>
                 </td>
                 <td><span class="flag">🇳🇵</span></td>
-                <td style="font-family:monospace; font-size:12px;">NP7823610</td>
+                <td style="font-family:monospace; font-size: 0.75rem;">NP7823610</td>
                 <td><span class="permit-type">RP</span></td>
                 <td>30 Nov 2025</td>
                 <td><span class="days-left days-green">271</span></td>
@@ -1912,7 +1977,7 @@
                   <div class="worker-id">ID: W-6628471</div>
                 </td>
                 <td><span class="flag">🇲🇲</span></td>
-                <td style="font-family:monospace; font-size:12px;">MM4490123</td>
+                <td style="font-family:monospace; font-size: 0.75rem;">MM4490123</td>
                 <td><span class="permit-type">PLKS</span></td>
                 <td>22 Jul 2025</td>
                 <td><span class="days-left days-green">140</span></td>
@@ -1924,10 +1989,10 @@
             </tbody>
           </table>
           <div
-            style="padding:14px 20px; border-top:1px solid var(--border); display:flex; align-items:center; gap:12px; font-size:13px; color:var(--muted);">
+            style="padding:14px 20px; border-top:1px solid var(--border); display:flex; align-items:center; gap:12px; font-size: 0.8125rem; color:var(--muted);">
             Showing 6 of 142 workers &nbsp;·&nbsp;
-            <button class="btn btn-ghost" style="padding:5px 12px; font-size:12px;">← Prev</button>
-            <button class="btn btn-ghost" style="padding:5px 12px; font-size:12px;">Next →</button>
+            <button class="btn btn-ghost" style="padding:5px 12px; font-size: 0.75rem;">← Prev</button>
+            <button class="btn btn-ghost" style="padding:5px 12px; font-size: 0.75rem;">Next →</button>
             <span style="margin-left:auto;">Page 1 of 24</span>
           </div>
         </div>
@@ -2045,7 +2110,8 @@
         <div class="card" style="margin: 0 0 20px;">
           <div class="card-header">
             <div class="card-title">📂 Document Library</div>
-            <select class="filter-select" style="font-size:12px;" onchange="showToast('🔍 Category filter applied')">
+            <select class="filter-select" style="font-size: 0.75rem;"
+              onchange="showToast('🔍 Category filter applied')">
               <option>All Categories</option>
               <option>Passports</option>
               <option>Permits (PLKS/EP)</option>
@@ -2113,21 +2179,22 @@
           <div class="card-header">
             <div class="card-title">🔔 Alerts & Notifications</div>
             <div style="display:flex; gap:8px; align-items:center;">
-              <span style="font-size:12px; color:var(--muted)">Auto-generated by Scheduled Workflow</span>
-              <button class="btn btn-ghost" style="font-size:12px; padding:6px 12px;" onclick="markAllRead()">✓ Mark All
+              <span style="font-size: 0.75rem; color:var(--muted)">Auto-generated by Scheduled Workflow</span>
+              <button class="btn btn-ghost" style="font-size: 0.75rem; padding:6px 12px;" onclick="markAllRead()">✓ Mark
+                All
                 Read</button>
             </div>
           </div>
 
           <div
             style="display:flex; gap:8px; padding:14px 16px; border-bottom:1px solid var(--border); background:#fafcff;">
-            <button class="btn btn-ghost" style="font-size:12px; padding:6px 14px;"
+            <button class="btn btn-ghost" style="font-size: 0.75rem; padding:6px 14px;"
               onclick="showToast('🔴 Showing urgent alerts')">🚨 Urgent (2)</button>
-            <button class="btn btn-ghost" style="font-size:12px; padding:6px 14px;"
+            <button class="btn btn-ghost" style="font-size: 0.75rem; padding:6px 14px;"
               onclick="showToast('⚠️ Showing warnings')">⚠️ Warning (3)</button>
-            <button class="btn btn-ghost" style="font-size:12px; padding:6px 14px;"
+            <button class="btn btn-ghost" style="font-size: 0.75rem; padding:6px 14px;"
               onclick="showToast('ℹ️ Showing info alerts')">ℹ️ Info (5)</button>
-            <button class="btn btn-ghost" style="font-size:12px; padding:6px 14px;"
+            <button class="btn btn-ghost" style="font-size: 0.75rem; padding:6px 14px;"
               onclick="showToast('✅ Showing resolved')">✅ Resolved (12)</button>
           </div>
 
@@ -2146,9 +2213,9 @@
                 </div>
               </div>
               <div class="ba-actions">
-                <button class="btn btn-primary" style="font-size:12px; padding:7px 14px; white-space:nowrap;"
+                <button class="btn btn-primary" style="font-size: 0.75rem; padding:7px 14px; white-space:nowrap;"
                   onclick="showToast('🚀 Renewal workflow initiated for Thida Win')">Start Renewal</button>
-                <button class="btn btn-ghost" style="font-size:12px; padding:7px 14px;"
+                <button class="btn btn-ghost" style="font-size: 0.75rem; padding:7px 14px;"
                   onclick="showToast('📲 WhatsApp reminder sent')">Remind</button>
               </div>
             </div>
@@ -2167,9 +2234,9 @@
                 </div>
               </div>
               <div class="ba-actions">
-                <button class="btn btn-primary" style="font-size:12px; padding:7px 14px; white-space:nowrap;"
+                <button class="btn btn-primary" style="font-size: 0.75rem; padding:7px 14px; white-space:nowrap;"
                   onclick="showToast('🚀 Renewal workflow initiated')">Start Renewal</button>
-                <button class="btn btn-ghost" style="font-size:12px; padding:7px 14px;"
+                <button class="btn btn-ghost" style="font-size: 0.75rem; padding:7px 14px;"
                   onclick="showToast('📲 Reminder sent')">Remind</button>
               </div>
             </div>
@@ -2188,7 +2255,7 @@
                 </div>
               </div>
               <div class="ba-actions">
-                <button class="btn btn-primary" style="font-size:12px; padding:7px 14px; white-space:nowrap;"
+                <button class="btn btn-primary" style="font-size: 0.75rem; padding:7px 14px; white-space:nowrap;"
                   onclick="showToast('📅 FOMEMA appointments booked')">Book Appointment</button>
               </div>
             </div>
@@ -2207,7 +2274,7 @@
                 </div>
               </div>
               <div class="ba-actions">
-                <button class="btn btn-primary" style="font-size:12px; padding:7px 14px; white-space:nowrap;"
+                <button class="btn btn-primary" style="font-size: 0.75rem; padding:7px 14px; white-space:nowrap;"
                   onclick="showToast('🛡️ FWHS renewal workflow started')">Renew Now</button>
               </div>
             </div>
@@ -2226,7 +2293,7 @@
                 </div>
               </div>
               <div class="ba-actions">
-                <button class="btn btn-ghost" style="font-size:12px; padding:7px 14px; white-space:nowrap;"
+                <button class="btn btn-ghost" style="font-size: 0.75rem; padding:7px 14px; white-space:nowrap;"
                   onclick="showToast('📄 Viewing permit document')">View Doc</button>
               </div>
             </div>
@@ -2297,7 +2364,7 @@
       <div class="form-group">
         <label class="form-label">Upload Passport / Permit (optional — AI will auto-extract)</label>
         <div
-          style="border:1.5px dashed var(--border); border-radius:9px; padding:14px; text-align:center; font-size:13px; color:var(--muted); cursor:pointer; background:var(--surface);"
+          style="border:1.5px dashed var(--border); border-radius:9px; padding:14px; text-align:center; font-size: 0.8125rem; color:var(--muted); cursor:pointer; background:var(--surface);"
           onclick="showToast('📎 File picker — connect Dify OCR Workflow in production')">
           📎 &nbsp;Click to upload passport image or PDF
         </div>
